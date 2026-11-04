@@ -1,0 +1,54 @@
+{
+  "_metadata": {
+    "synthetic": true,
+    "language": "hinglish",
+    "description": "Synthetic Hinglish conversations for evaluating scam tactics and risk scoring"
+  },
+  "scam_telecom_sim_block": [
+    {
+      "text": "Hello sir, this is TRAI Telecom verification department.",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "Aapka mobile number illegal activities mein use hua hai, within 2 hours permanent block kar denge.",
+      "expected_tactics": ["fear_manipulation", "urgency_creation"]
+    },
+    {
+      "text": "Police complaint se bachne ke liye biometric re-verification karwana padega.",
+      "expected_tactics": ["fear_manipulation", "kyc_fraud"]
+    },
+    {
+      "text": "Aapke phone pe 6 digit OTP aaya hoga, turant batao warna line disconnect ho jayegi.",
+      "expected_tactics": ["otp_request", "urgency_creation"]
+    }
+  ],
+  "scam_credit_card_reward": [
+    {
+      "text": "Congratulations sir, aapke HDFC credit card pe 25000 rupees ka reward points cashback nikla hai.",
+      "expected_tactics": ["reward_scam"]
+    },
+    {
+      "text": "Yeh reward points aaj expire ho jayenge, jaldi claim karna padega.",
+      "expected_tactics": ["urgency_creation"]
+    },
+    {
+      "text": "Amount receive karne ke liye apna card number aur CVV share kijiye.",
+      "expected_tactics": ["identity_manipulation"]
+    }
+  ],
+  "benign_dinner_plan": [
+    {
+      "text": "Hey bro, kaisa hai? Shaam ko kya plan hai?",
+      "expected_tactics": []
+    },
+    {
+      "text": "Hum sab 8 baje cafe mein mil rahe hain, tu bhi aa ja.",
+      "expected_tactics": []
+    },
+    {
+      "text": "Pakka bro, see you there at 8 PM.",
+      "expected_tactics": []
+    }
+  ]
+}
+

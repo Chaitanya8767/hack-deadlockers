@@ -1,0 +1,58 @@
+{
+  "_metadata": {
+    "synthetic": true,
+    "language": "en",
+    "description": "Synthetic conversations for evaluating scam tactics and risk scoring"
+  },
+  "scam_digital_arrest": [
+    {
+      "text": "Hello, I am Officer Sharma calling from the Customs Department Mumbai Headquarters.",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "A parcel addressed in your name containing illegal contraband and narcotics has been seized.",
+      "expected_tactics": ["fear_manipulation"]
+    },
+    {
+      "text": "A federal non-bailable arrest warrant has been issued against you under the NDPS Act.",
+      "expected_tactics": ["fear_manipulation", "digital_arrest"]
+    },
+    {
+      "text": "You are placed under digital arrest right now. Do not disconnect this call or inform anyone.",
+      "expected_tactics": ["digital_arrest", "urgency_creation"]
+    },
+    {
+      "text": "To clear your name from the police chargesheet, you must immediately transfer your funds to the RBI safe verification account.",
+      "expected_tactics": ["financial_manipulation", "urgency_creation"]
+    }
+  ],
+  "scam_remote_access": [
+    {
+      "text": "Good day sir, this is Michael from Microsoft Technical Security Support.",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "We have detected severe malicious Trojan activity broadcasting from your IP address.",
+      "expected_tactics": ["fear_manipulation"]
+    },
+    {
+      "text": "Please open your browser immediately and install the AnyDesk QuickSupport application so we can secure your computer.",
+      "expected_tactics": ["remote_access", "urgency_creation"]
+    }
+  ],
+  "benign_flight_support": [
+    {
+      "text": "Good afternoon, this is customer service calling from Indigo Airlines regarding your upcoming flight to Delhi.",
+      "expected_tactics": []
+    },
+    {
+      "text": "We would like to inform you that your flight departure has been rescheduled by thirty minutes.",
+      "expected_tactics": []
+    },
+    {
+      "text": "Your updated departure time is 4:45 PM from Terminal 2. Have a pleasant trip.",
+      "expected_tactics": []
+    }
+  ]
+}
+

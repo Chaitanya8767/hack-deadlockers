@@ -1,0 +1,54 @@
+{
+  "_metadata": {
+    "synthetic": true,
+    "language": "mr",
+    "description": "Synthetic Marathi conversations for evaluating scam tactics and risk scoring"
+  },
+  "scam_police_digital_arrest": [
+    {
+      "text": "नमस्कार, मी मुंबई पोलीस मुख्यालयातून सायबर सेल इन्स्पेक्टर पाटील बोलत आहे.",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "तुमच्या नावावर बेकायदेशीर औषध तस्करी आणि हवाला रॅकेटचा गंभीर गुन्हा दाखल झाला आहे.",
+      "expected_tactics": ["fear_manipulation"]
+    },
+    {
+      "text": "तुम्हाला सध्या डिजिटल अरेस्ट करण्यात आले आहे, कॉल डिस्कनेक्ट करू नका आणि खोलीतून बाहेर पडू नका.",
+      "expected_tactics": ["digital_arrest", "fear_manipulation"]
+    },
+    {
+      "text": "तात्काळ तपास पूर्ण करण्यासाठी पडताळणी खात्यावर पैसे पाठवा नाहीतर थेट अटक केली जाईल.",
+      "expected_tactics": ["financial_manipulation", "urgency_creation"]
+    }
+  ],
+  "scam_electricity_bill": [
+    {
+      "text": "महावितरण वीज विभागातून बोलतोय, तुमचे मागील महिन्याचे वीज बिल भरलेले नाही.",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "आज रात्री नऊ वाजता तुमची वीज कायमची खंडित केली जाईल.",
+      "expected_tactics": ["fear_manipulation", "urgency_creation"]
+    },
+    {
+      "text": "लगेच आम्ही पाठवलेल्या नंबरवर पाचशे रुपये पाठवून वीज बिल अपडेट करा.",
+      "expected_tactics": ["financial_manipulation", "urgency_creation"]
+    }
+  ],
+  "benign_family_call": [
+    {
+      "text": "नमस्कार काका, मी राहुल बोलतोय. कसे आहात तुम्ही?",
+      "expected_tactics": []
+    },
+    {
+      "text": "आईने सांगितले होते की तुम्ही पुण्याला येणार आहात, कधी पोहोचणार आहात?",
+      "expected_tactics": []
+    },
+    {
+      "text": "हो चालेल, स्टेशनवर आल्यावर फोन करा, मी गाडी घेऊन येतो.",
+      "expected_tactics": []
+    }
+  ]
+}
+

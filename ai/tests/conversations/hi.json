@@ -1,0 +1,58 @@
+{
+  "_metadata": {
+    "synthetic": true,
+    "language": "hi",
+    "description": "Synthetic Hindi conversations for evaluating scam tactics and risk scoring"
+  },
+  "scam_cbi_digital_arrest": [
+    {
+      "text": "नमस्कार, मैं सीबीआई क्राइम ब्रांच नई दिल्ली से सीनियर इंस्पेक्टर अजय कुमार बोल रहा हूँ।",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "आपके आधार कार्ड से जुड़े 5 बैंक खातों से करोड़ों रुपयों की अवैध मनी लॉन्ड्रिंग हुई है।",
+      "expected_tactics": ["fear_manipulation"]
+    },
+    {
+      "text": "सुप्रीम कोर्ट ने आपके खिलाफ तत्काल डिजिटल अरेस्ट का वारंट जारी कर दिया है।",
+      "expected_tactics": ["digital_arrest", "fear_manipulation"]
+    },
+    {
+      "text": "आप तुरंत अपने कमरे का दरवाजा बंद करें और कॉल चालू रखें, किसी को भी इसकी जानकारी नहीं होनी चाहिए।",
+      "expected_tactics": ["digital_arrest", "urgency_creation"]
+    },
+    {
+      "text": "अगर आप गिरफ्तारी से बचना चाहते हैं तो 15 मिनट के अंदर सिक्योरिटी डिपॉजिट के तौर पर सरकारी खाते में पैसे ट्रांसफर कीजिए।",
+      "expected_tactics": ["financial_manipulation", "urgency_creation"]
+    }
+  ],
+  "scam_bank_kyc_otp": [
+    {
+      "text": "नमस्ते, मैं स्टेट बैंक ऑफ इंडिया के मुख्य शाखा से मैनेजर बात कर रहा हूँ।",
+      "expected_tactics": ["authority_impersonation"]
+    },
+    {
+      "text": "आपका बैंक खाता केवाईसी अपडेट न होने के कारण आज शाम को हमेशा के लिए ब्लॉक कर दिया जाएगा।",
+      "expected_tactics": ["kyc_fraud", "fear_manipulation"]
+    },
+    {
+      "text": "खाता चालू रखने के लिए आपके मोबाइल पर अभी एक 6 अंकों का ओटीपी आया होगा, तुरंत बताइए।",
+      "expected_tactics": ["otp_request", "urgency_creation"]
+    }
+  ],
+  "benign_food_delivery": [
+    {
+      "text": "भैया नमस्ते, मैं स्विगी से डिलीवरी बॉय बोल रहा हूँ।",
+      "expected_tactics": []
+    },
+    {
+      "text": "मैं आपकी बिल्डिंग के गेट नंबर 2 के पास खड़ा हूँ, क्या आप नीचे आ सकते हैं?",
+      "expected_tactics": []
+    },
+    {
+      "text": "हाँ ठीक है भैया, मैं लिफ्ट के पास ही आपका इंतज़ार कर रहा हूँ।",
+      "expected_tactics": []
+    }
+  ]
+}
+

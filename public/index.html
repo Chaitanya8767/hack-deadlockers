@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>CallApp</title>
+<style>
+:root{
+  --bg:#fff; --surface:#f5f5f7; --surface-2:#ebebf0; --line:rgba(0,0,0,.08);
+  --text:#1d1d1f; --muted:#6e6e73; --faint:#86868b;
+  --blue:#0071e3; --blue-press:#0062c4; --green:#34c759; --green-ink:#1f8a3b;
+  --orange:#ff9f0a; --orange-ink:#b25e00; --red:#ff3b30; --red-ink:#d70015; --amber:#ff6b00;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 8px 30px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Inter","Segoe UI",Roboto,system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.011em;line-height:1.4}
+button,input,select{font-family:inherit;letter-spacing:inherit}
+button{cursor:pointer;border:0;background:none;color:inherit;padding:0}
+:focus-visible{outline:3px solid rgba(0,113,227,.45);outline-offset:2px;border-radius:8px}
+.hidden{display:none !important}
+h1,h2,h3,p{margin:0}
+
+/* ---------- login ---------- */
+#loginView{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center}
+.login-mark{width:72px;height:72px;border-radius:20px;background:linear-gradient(180deg,#3b9bff,#0071e3);display:grid;place-items:center;box-shadow:0 10px 30px rgba(0,113,227,.28);margin-bottom:28px}
+.login-mark svg{width:38px;height:38px}
+#loginView h2{font-size:40px;font-weight:700;letter-spacing:-.03em}
+#loginView .sub{color:var(--muted);font-size:19px;margin:8px 0 32px;max-width:340px}
+.field{width:100%;max-width:340px;padding:16px 18px;border-radius:14px;border:1px solid var(--line);background:var(--surface);
+  font-size:19px;text-align:center;color:var(--text);transition:background .2s,border-color .2s,box-shadow .2s}
+.field:focus{outline:none;background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,113,227,.15)}
+.field::placeholder{color:var(--faint)}
+.btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:340px;margin-top:12px;padding:15px 22px;
+  border-radius:14px;background:var(--blue);color:#fff;font-size:17px;font-weight:600;transition:background .15s,transform .1s}
+.btn-primary:hover{background:#0077ed}.btn-primary:active{background:var(--blue-press);transform:scale(.985)}
+.btn-green{background:var(--green)}.btn-green:hover{background:#2fc050}.btn-green:active{background:#2aa94a}
+.btn-soft{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:980px;background:var(--surface);font-size:14px;font-weight:500;color:var(--blue);transition:background .15s}
+.btn-soft:hover{background:var(--surface-2)}
+.btn-soft.danger{color:var(--red-ink)}
+
+/* ---------- shell ---------- */
+#appShell{display:flex;min-height:100vh}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:248px;z-index:30;padding:22px 14px 18px;display:flex;flex-direction:column;
+  background:rgba(246,246,248,.92);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);border-right:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:-.025em;padding:0 10px}
+.brand i{width:32px;height:32px;border-radius:9px;background:linear-gradient(180deg,#3b9bff,#0071e3);display:grid;place-items:center}
+.brand i svg{width:18px;height:18px}
+.tabs{display:flex;flex-direction:column;gap:2px;margin-top:30px}
+.tab{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border-radius:10px;font-size:15px;font-weight:500;color:var(--text);text-align:left;position:relative;transition:background .15s,color .15s}
+.tab svg{width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tab:hover{background:rgba(0,0,0,.05)}
+.tab.active{background:rgba(0,113,227,.12);color:var(--blue)}
+.tab.active svg{stroke:var(--blue)}
+.tab .live-dot{position:absolute;right:12px;top:50%;margin-top:-4px;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(52,199,89,.22)}
+.who{margin-top:auto;display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);background:#fff;padding:10px 12px;border-radius:12px;box-shadow:0 0 0 .5px rgba(0,0,0,.08)}
+.who b{color:var(--text);font-weight:600;font-variant-numeric:tabular-nums;margin-left:auto}
+.who i{width:8px;height:8px;border-radius:50%;background:var(--faint);flex:none}
+.who i.on{background:var(--green)}
+.content{flex:1;min-width:0;margin-left:248px}
+.mbar{display:none}
+
+main.wrap{max-width:1040px;margin:0 auto;padding:44px 36px 80px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:28px;flex-wrap:wrap}
+.page-head h1{font-size:40px;font-weight:700;letter-spacing:-.035em;line-height:1.08}
+.page-head p{color:var(--muted);font-size:17px;margin-top:6px}
+
+#status{position:fixed;left:50%;top:calc(18px + env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:50;max-width:min(520px,calc(100vw - 32px));
+  background:rgba(29,29,31,.9);color:#fff;font-size:14px;padding:10px 18px;border-radius:14px;text-align:center;
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);box-shadow:0 8px 30px rgba(0,0,0,.2)}
+#status:empty{display:none}
+
+/* ---------- cards ---------- */
+.card{background:var(--surface);border-radius:22px;padding:24px}
+.card.white{background:#fff;box-shadow:var(--shadow);border:1px solid var(--line)}
+.card h3{font-size:19px;font-weight:600;letter-spacing:-.02em}
+.card .cap{color:var(--muted);font-size:14px;margin-top:3px}
+.grid{display:grid;gap:16px}
+.g-stats{grid-template-columns:repeat(4,1fr);margin:16px 0}
+.g-two{grid-template-columns:1.25fr 1fr}
+.stat{background:var(--surface);border-radius:22px;padding:20px 22px}
+.stat .k{font-size:14px;color:var(--muted);font-weight:500}
+.stat .v{font-size:36px;font-weight:700;letter-spacing:-.035em;margin-top:6px;font-variant-numeric:tabular-nums;line-height:1.1}
+.stat .s{font-size:13px;color:var(--faint);margin-top:4px}
+.v.c-red{color:var(--red-ink)}.v.c-orange{color:var(--orange-ink)}.v.c-green{color:var(--green-ink)}
+
+/* shield status */
+.shield-status{display:flex;align-items:center;gap:20px;flex-wrap:wrap;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:24px;padding:24px 26px}
+.shield-ico{width:56px;height:56px;border-radius:16px;background:rgba(52,199,89,.14);display:grid;place-items:center;flex:none}
+.shield-ico svg{width:28px;height:28px;stroke:var(--green-ink);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.shield-ico.warn{background:rgba(255,159,10,.16)}.shield-ico.warn svg{stroke:var(--orange-ink)}
+.shield-ico.live{background:rgba(0,113,227,.12)}.shield-ico.live svg{stroke:var(--blue)}
+.shield-status .txt{flex:1;min-width:200px}
+.shield-status h3{font-size:21px}
+.checks{display:flex;gap:8px;flex-wrap:wrap}
+.check{font-size:13px;padding:6px 12px;border-radius:980px;background:var(--surface);color:var(--muted);display:flex;align-items:center;gap:7px}
+.check i{width:7px;height:7px;border-radius:50%;background:var(--faint)}
+.check.ok i{background:var(--green)}.check.warn i{background:var(--orange)}.check.bad i{background:var(--red)}
+.check b{color:var(--text);font-weight:500}
+
+/* chart + bars */
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:22px;padding-bottom:2px;border-bottom:1px solid var(--line)}
+.bar{flex:1;min-width:0;max-width:44px;display:flex;flex-direction:column;justify-content:flex-end;height:100%;align-items:center}
+.bar i{display:block;width:100%;border-radius:8px 8px 3px 3px;min-height:4px;background:var(--green)}
+.bar-labels{display:flex;gap:10px;margin-top:6px}
+.bar-labels span{flex:1;min-width:0;max-width:44px;text-align:center;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:14px;margin-top:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:6px}.legend i{width:8px;height:8px;border-radius:50%}
+.hbar{margin-top:18px}.hbar:first-of-type{margin-top:20px}
+.hbar-row{display:flex;justify-content:space-between;font-size:14px}
+.hbar-row span:last-child{color:var(--muted);font-variant-numeric:tabular-nums}
+.hbar-track{height:6px;border-radius:3px;background:var(--surface-2);margin-top:7px;overflow:hidden}
+.hbar-track i{display:block;height:100%;background:var(--red);border-radius:3px}
+.empty{color:var(--muted);font-size:15px;padding:34px 8px;text-align:center}
+.empty b{display:block;color:var(--text);font-size:17px;font-weight:600;margin-bottom:4px}
+
+/* ---------- call rows ---------- */
+.list{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.day{font-size:13px;font-weight:600;color:var(--muted);margin:26px 4px 10px}
+.day:first-child{margin-top:0}
+.row{border-top:1px solid var(--line)}.row:first-child{border-top:0}
+.row-head{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;text-align:left;transition:background .15s}
+.row-head:hover{background:#fafafc}
+.r-ico{width:40px;height:40px;border-radius:50%;background:var(--surface);display:grid;place-items:center;flex:none}
+.r-ico svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.r-ico.bad{background:rgba(255,59,48,.1)}.r-ico.bad svg{stroke:var(--red-ink)}
+.r-main{flex:1;min-width:0}
+.r-title{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.r-title.bad{color:var(--red-ink)}
+.r-sub{font-size:14px;color:var(--muted);margin-top:1px}
+.r-side{display:flex;align-items:center;gap:12px;flex:none}
+.r-time{font-size:14px;color:var(--faint)}
+.pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:980px;white-space:nowrap}
+.pill.low{background:rgba(52,199,89,.15);color:var(--green-ink)}
+.pill.medium{background:rgba(255,159,10,.17);color:var(--orange-ink)}
+.pill.high{background:rgba(255,107,0,.15);color:#b34700}
+.pill.critical{background:rgba(255,59,48,.14);color:var(--red-ink)}
+.pill.none{background:var(--surface);color:var(--faint);font-weight:500}
+.chev{width:16px;height:16px;stroke:var(--faint);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+.row.open .chev{transform:rotate(90deg)}
+.detail{display:none;padding:2px 20px 20px 74px}
+.row.open .detail{display:block}
+.detail .lbl{font-size:13px;color:var(--muted);font-weight:500;margin:14px 0 8px}
+.detail .lbl:first-child{margin-top:4px}
+.dmeter{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.dmeter i{display:block;height:100%;border-radius:4px}
+.alert-note{background:var(--surface);border-radius:14px;padding:12px 14px;font-size:14px}
+.alert-note span{display:block;color:var(--muted);margin-top:2px;font-size:13px}
+.lines{background:var(--surface);border-radius:14px;padding:6px 14px;font-size:14px}
+.lines div{padding:8px 0;border-top:1px solid var(--line)}.lines div:first-child{border-top:0}
+.lines small{display:block;color:var(--faint);padding:6px 0 8px;border-top:1px solid var(--line)}
+.detail .acts{margin-top:16px;display:flex;gap:8px}
+
+.seg{display:inline-flex;background:var(--surface);padding:3px;border-radius:10px;gap:2px}
+.seg button{padding:6px 16px;border-radius:8px;font-size:14px;font-weight:500;color:var(--muted);transition:all .2s}
+.seg button.active{background:#fff;color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* ---------- live: dial ---------- */
+#dialView{max-width:440px;margin:24px auto 0;text-align:center}
+#dialView .card{padding:36px 28px 30px;background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:28px}
+#dialView h2{font-size:30px;font-weight:700;letter-spacing:-.03em}
+#me{color:var(--muted);font-size:15px;margin:6px 0 24px;font-variant-numeric:tabular-nums}
+#dialView .field{max-width:none;font-size:24px;letter-spacing:.02em}
+#dialView .btn-primary{max-width:none;margin-top:14px}
+.recents{margin-top:22px;text-align:left}
+.recents .t{font-size:13px;color:var(--muted);font-weight:500;margin-bottom:8px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip-btn{padding:8px 15px;border-radius:980px;background:var(--surface);font-size:15px;font-variant-numeric:tabular-nums;font-weight:500;transition:background .15s}
+.chip-btn:hover{background:var(--surface-2)}
+
+/* ---------- live: call ---------- */
+.call-grid{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:20px;align-items:start}
+.call-grid:has(#shieldPanel.hidden){grid-template-columns:minmax(300px,420px);justify-content:center}
+.call-card{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);border-radius:28px;padding:36px 24px 30px;text-align:center}
+.avatar{width:104px;height:104px;border-radius:50%;background:linear-gradient(180deg,#e9e9ee,#d6d6dc);margin:0 auto 18px;display:grid;place-items:center}
+.avatar svg{width:52px;height:52px;fill:#fff}
+#peer{font-size:30px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+#timer{color:var(--muted);font-size:17px;margin-top:4px;min-height:24px;font-variant-numeric:tabular-nums}
+#controls{margin-top:30px;display:flex;justify-content:center;gap:22px}
+#controls button{width:68px;height:68px;border-radius:50%;font-size:26px;display:grid;place-items:center;color:#fff;transition:transform .12s,filter .15s,background .2s}
+#controls button:active{transform:scale(.93)}
+#controls svg{width:30px;height:30px;fill:#fff}
+.green{background:var(--green)}.red{background:var(--red)}
+.grey{background:var(--surface-2);color:var(--text) !important}
+.grey.on{background:var(--text);color:#fff !important}
+.meters{margin-top:28px;text-align:left;font-size:12px;color:var(--muted);font-weight:500}
+.meter{height:5px;background:var(--surface-2);border-radius:3px;margin:6px 0 14px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--green);border-radius:3px;transition:width .08s linear}
+
+/* shield panel (IDs unchanged) */
+.shield-panel{background:var(--surface);border-radius:26px;padding:22px 22px 20px;text-align:left;font-size:14px}
+.shield-header{display:flex;align-items:center;justify-content:space-between;gap:12px;cursor:pointer;user-select:none}
+.shield-title{display:flex;align-items:center;gap:10px;font-weight:600;font-size:19px;letter-spacing:-.02em}
+.shield-title svg{width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.shield-badge{font-size:12px;padding:5px 11px;border-radius:980px;background:#fff;color:var(--muted);display:flex;align-items:center;gap:7px;max-width:55%;box-shadow:0 0 0 .5px rgba(0,0,0,.06)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--faint);flex:none}
+.dot.listening{background:var(--green)}.dot.degraded{background:var(--orange)}.dot.error{background:var(--red)}.dot.connecting{background:var(--blue)}
+.shield-body{margin-top:18px;padding-top:6px}
+.risk-readout{display:flex;align-items:baseline;justify-content:space-between}
+.risk-readout .lab{font-size:14px;color:var(--muted);font-weight:500}
+#shieldRiskText{font-size:30px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.shield-stats{font-size:12px;color:var(--faint);margin-top:2px}
+.risk-bar-bg{height:10px;background:var(--surface-2);border-radius:5px;overflow:hidden;margin:12px 0 14px}
+.risk-bar-fill{height:100%;width:0%;background:var(--green);transition:width .5s cubic-bezier(.3,.7,.2,1),background .4s;border-radius:5px}
+.chips-container{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.tactic-chip{font-size:12px;padding:4px 10px;border-radius:980px;background:rgba(255,59,48,.1);color:var(--red-ink);font-weight:500;text-transform:capitalize}
+.alert-box{padding:14px 16px;border-radius:16px;background:#fff;margin-top:12px;font-size:14px;border-left:4px solid var(--green)}
+.alert-box.medium{border-color:var(--orange);background:#fffaf0}
+.alert-box.high{border-color:var(--amber);background:#fff6ee}
+.alert-box.critical{border-color:var(--red);background:#fff1f0}
+.alert-box b{font-weight:600;font-size:15px;letter-spacing:-.015em}
+#shieldAlertAction{color:var(--muted);margin-top:3px}
+.transcript-box{max-height:150px;overflow-y:auto;background:#fff;padding:10px 14px;border-radius:16px;margin-top:12px;font-size:14px;color:var(--text)}
+.transcript-box .ph{color:var(--faint);font-style:italic}
+.utt{margin:6px 0;line-height:1.45}
+.utt .t0{color:var(--faint);font-size:11px;margin-right:6px;font-variant-numeric:tabular-nums}
+.utt .lg{background:var(--surface);color:var(--muted);padding:1px 7px;border-radius:6px;font-size:11px;margin-right:6px;font-weight:500}
+.highlight-tactic{background:rgba(255,59,48,.16);color:var(--red-ink);padding:1px 3px;border-radius:4px}
+.asr-row{margin-top:16px;display:flex;gap:10px;align-items:center;font-size:13px;color:var(--muted)}
+.asr-row select{background:#fff;border:1px solid var(--line);border-radius:10px;color:var(--text);padding:6px 10px;font-size:13px}
+#asrLive{margin-top:6px;font-size:13px;color:var(--faint);min-height:16px}
+#typedForm{display:flex;gap:8px;margin-top:12px}
+#typedInput{flex:1;min-width:0;background:#fff;border:1px solid var(--line);border-radius:12px;color:var(--text);padding:10px 14px;font-size:14px}
+#typedInput:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 4px rgba(0,113,227,.15)}
+#typedForm button{background:var(--blue);color:#fff;border-radius:12px;padding:10px 18px;font-size:14px;font-weight:600}
+
+/* ---------- responsive ---------- */
+@media (max-width:1100px) and (min-width:701px){.sidebar{width:210px}.content{margin-left:210px}main.wrap{padding:36px 24px 80px}}
+@media (max-width:860px){
+  .g-stats{grid-template-columns:repeat(2,1fr)}
+  .g-two{grid-template-columns:1fr}
+  .call-grid,.call-grid:has(#shieldPanel.hidden){grid-template-columns:1fr}
+}
+@media (max-width:700px){
+  .sidebar{display:contents}
+  .mbar{display:block;position:fixed;left:0;right:0;top:0;height:calc(54px + env(safe-area-inset-top,0px));z-index:29;background:rgba(255,255,255,.92);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-bottom:1px solid var(--line)}
+  .brand{position:fixed;z-index:31;top:calc(11px + env(safe-area-inset-top,0px));left:18px;padding:0;font-size:17px}
+  .brand i{width:28px;height:28px}
+  .who{position:fixed;z-index:31;top:calc(11px + env(safe-area-inset-top,0px));right:16px;margin:0;padding:6px 12px;background:var(--surface);box-shadow:none;border-radius:980px}
+  .who b{margin-left:4px}
+  .tabs{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:40;margin:0;flex-direction:row;padding:6px;border-radius:22px;
+    background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);box-shadow:0 8px 32px rgba(0,0,0,.16),0 0 0 .5px rgba(0,0,0,.08)}
+  .tab{flex-direction:column;gap:3px;padding:8px 6px;font-size:11px;flex:1;justify-content:center;align-items:center;border-radius:16px}
+  .tab svg{width:22px;height:22px}
+  .tab .live-dot{top:7px;right:calc(50% - 22px);margin:0}
+  .content{margin-left:0;padding-top:calc(54px + env(safe-area-inset-top,0px))}
+  main.wrap{padding:22px 16px 120px}
+  .page-head h1{font-size:32px}
+  .detail{padding-left:20px}
+  .r-time{display:none}
+  #status{top:calc(62px + env(safe-area-inset-top,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+
+/* weekly + mix charts */
+.wk{display:flex;gap:12px;align-items:flex-end;height:160px;margin-top:22px;border-bottom:1px solid var(--line)}
+.wk .d{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.wk .stack{width:100%;max-width:46px;display:flex;flex-direction:column-reverse;border-radius:8px 8px 3px 3px;overflow:hidden;min-height:0}
+.wk .num{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;height:14px}
+.wk-l{display:flex;gap:12px;margin-top:6px}.wk-l span{flex:1;text-align:center;font-size:12px;color:var(--muted)}
+.mixbar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--surface-2);margin-top:22px}
+.mixbar i{display:block;height:100%}
+.mixrow{display:flex;align-items:center;gap:10px;margin-top:14px;font-size:15px}
+.mixrow i{width:10px;height:10px;border-radius:50%;flex:none}
+.mixrow span:nth-child(3){margin-left:auto;color:var(--muted);font-variant-numeric:tabular-nums}
+.hist-tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.btn-fill{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:980px;background:var(--blue);color:#fff;font-size:14px;font-weight:600}
+.btn-fill:hover{background:#0077ed}
+.scam-banner{position:fixed;right:24px;bottom:24px;z-index:60;width:min(380px,calc(100vw - 32px));background:#fff;border:1px solid var(--line);border-left:5px solid var(--red);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.18);padding:18px 20px}
+.scam-banner b{display:block;font-size:16px;color:var(--red-ink)}
+.scam-banner span{display:block;font-size:14px;color:var(--muted);margin-top:4px}
+.bn-acts{display:flex;gap:8px;margin-top:14px}
+@media (max-width:700px){.scam-banner{bottom:100px}}
+</style>
+</head>
+<body>
+<div id="status"></div>
+
+<!-- ===== LOGIN ===== -->
+<div id="loginView">
+  <div class="login-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <h2>CallApp</h2>
+  <p class="sub">Voice calls with a scam shield that listens for you.</p>
+  <input id="myId" class="field" placeholder="Your number / ID (e.g. 1001)" inputmode="numeric" autocomplete="off">
+  <button class="btn-primary" onclick="register()">Continue</button>
+</div>
+
+<!-- ===== APP SHELL ===== -->
+<div id="appShell" class="hidden">
+  <div class="mbar"></div>
+  <aside class="sidebar">
+    <div class="brand"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/></svg></i>CallApp</div>
+    <nav class="tabs" role="tablist" aria-label="Sections" aria-orientation="vertical">
+      <button class="tab active" role="tab" data-tab="dashboard" aria-selected="true">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="8" rx="2"/><rect x="13.5" y="3.5" width="7" height="5" rx="2"/><rect x="13.5" y="11.5" width="7" height="9" rx="2"/><rect x="3.5" y="14.5" width="7" height="6" rx="2"/></svg>Dashboard</button>
+      <button class="tab" role="tab" data-tab="live" aria-selected="false">
+        <svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z"/></svg>Live Call<span id="liveDot" class="live-dot hidden"></span></button>
+      <button class="tab" role="tab" data-tab="history" aria-selected="false">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>History</button>
+    </nav>
+    <div class="who"><i id="whoDot"></i>Your number <b id="whoNum">—</b></div>
+  </aside>
+  <div class="content">
+  <main class="wrap">
+
+    <!-- DASHBOARD -->
+    <section id="panel-dashboard">
+      <div class="page-head">
+        <div><h1 id="greet">Hello</h1><p id="greetSub">Here is how your calls are doing.</p></div>
+        <button class="btn-soft" data-goto="live">Start a call</button>
+      </div>
+      <div class="shield-status" id="shieldStatusCard"></div>
+      <div class="grid g-stats" id="statGrid"></div>
+      <div class="grid g-two" style="margin-bottom:16px">
+        <div class="card" id="weekCard"></div>
+        <div class="card" id="mixCard"></div>
+      </div>
+      <div class="grid g-two">
+        <div class="card" id="chartCard"></div>
+        <div class="card" id="tacticCard"></div>
+      </div>
+      <div class="page-head" style="margin:34px 0 14px"><div><h3 style="font-size:24px;font-weight:700;letter-spacing:-.025em">Recent calls</h3></div><button class="btn-soft" data-goto="history">See all</button></div>
+      <div id="recentList"></div>
+    </section>
+
+    <!-- LIVE CALL -->
+    <section id="panel-live" class="hidden">
+      <div id="dialView" class="hidden">
+        <div class="card">
+          <h2>Make a call</h2>
+          <div id="me"></div>
+          <input id="toId" class="field" placeholder="Number to call" inputmode="numeric" autocomplete="off">
+          <button class="btn-primary btn-green" onclick="startCall()">Call</button>
+          <div class="recents hidden" id="recents"><div class="t">Recent numbers</div><div class="chips" id="recentChips"></div></div>
+        </div>
+      </div>
+
+      <div id="callView" class="hidden">
+        <div class="call-grid">
+          <div class="call-card">
+            <div class="avatar"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.2"/><path d="M3.8 21c.6-4.2 4-6.4 8.2-6.4s7.6 2.2 8.2 6.4z"/></svg></div>
+            <div id="peer"></div>
+            <div id="timer"></div>
+            <div id="controls">
+              <button id="acceptBtn" class="green hidden" onclick="acceptCall()" aria-label="Accept"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg></button>
+              <button id="muteBtn" class="grey hidden" onclick="toggleMute()" aria-label="Mute">🎤</button>
+              <button id="endBtn" class="red" onclick="endCall(true)" aria-label="End call"><svg viewBox="0 0 24 24" style="transform:rotate(135deg)"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg></button>
+            </div>
+            <div class="meters hidden" id="meters">
+              You<div class="meter"><i id="lvlLocal"></i></div>
+              Them<div class="meter"><i id="lvlRemote"></i></div>
+            </div>
+          </div>
+
+          <!-- AI Scam Shield Panel -->
+          <div id="shieldPanel" class="shield-panel hidden">
+            <div class="shield-header" onclick="toggleShieldBody()">
+              <span class="shield-title"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>Scam Shield</span>
+              <span id="shieldBadge" class="shield-badge">
+                <i id="shieldDot" class="dot"></i>
+                <span id="shieldStatusText">Connecting…</span>
+              </span>
+            </div>
+            <div id="shieldBody" class="shield-body">
+              <div class="risk-readout"><span class="lab">Scam risk</span><b id="shieldRiskText" style="color:#1f8a3b">0% (Low)</b></div>
+              <div class="shield-stats">Audio analysed: <b id="shieldBytes" style="font-weight:500">0 KB</b></div>
+              <div class="risk-bar-bg"><div id="shieldRiskBar" class="risk-bar-fill"></div></div>
+              <div id="shieldChips" class="chips-container"></div>
+              <div id="shieldAlert" class="alert-box">
+                <b id="shieldAlertMsg">Monitoring caller for fraud tactics…</b>
+                <div id="shieldAlertAction">No immediate action needed.</div>
+              </div>
+              <div id="shieldTranscript" class="transcript-box">
+                <span class="ph" style="font-style:italic">Waiting for speech…</span>
+              </div>
+              <div class="asr-row">
+                <span>Caller voice language</span>
+                <select id="asrLang">
+                  <option value="mr-IN" selected>Marathi</option>
+                  <option value="hi-IN">Hindi</option>
+                  <option value="en-IN">English (India)</option>
+                </select>
+              </div>
+              <div id="asrLive"></div>
+              <form id="typedForm" onsubmit="sendTypedText(event)">
+                <input id="typedInput" type="text" autocomplete="off" placeholder="Type what the caller says…">
+                <button type="submit">Send</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="panel-history" class="hidden">
+      <div class="page-head">
+        <div><h1>History</h1><p id="histSub">Calls made and received on this device. Open a call to download its report.</p></div>
+        <div class="seg" id="histFilter"><button class="active" data-f="all">All</button><button data-f="flagged">Flagged</button><button data-f="missed">Not connected</button></div>
+      </div>
+      <div id="histList"></div>
+      <div style="margin-top:24px;text-align:center" id="histFoot"></div>
+    </section>
+
+  </main>
+  </div>
+</div>
+<audio id="remoteAudio" autoplay playsinline></audio>
+
+<script>
+const $ = id => document.getElementById(id);
+const DEFAULT_ICE_SERVERS = [
+    { urls: 'stun:stun.l.google.com:19302' },
+    { urls: 'stun:stun.relay.metered.ca:80' }
+];
+
+const BROWSER_ASR = true; // true = Chrome Marathi speech; false = old Whisper pipeline
+let isCaller = false;
+let ws, myId, peerId, pc, localStream, remoteStream, pendingOffer, pendingIce = [], ringTimer, tick, startTs, audioCtx, connectionTimer;
+
+/* ===== AUDIO ACCESS HOOK (future scam detection plugs in here) ===== */
+// Called with 1-second chunks (Blob, webm/opus) of each side of the call.
+function onAudioChunk(who, blob) { /* e.g. upload to your backend over a WebSocket */ }
+function tapStream(stream, who, meterEl) {
+  try {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const src = audioCtx.createMediaStreamSource(stream);
+    const an = audioCtx.createAnalyser();
+    an.fftSize = 256;
+    src.connect(an);
+    const buf = new Uint8Array(an.frequencyBinCount);
+    (function loop(){
+      if (!pc) return;
+      an.getByteTimeDomainData(buf);
+      let max = 0;
+      for (const v of buf) max = Math.max(max, Math.abs(v - 128));
+      if (meterEl) meterEl.style.width = Math.min(100, max * 1.6) + '%';
+      requestAnimationFrame(loop);
+    })();
+  } catch(e) {
+    console.warn('Audio tap warning:', e);
+  }
+}
+
+/* ===== SIGNALING ===== */
+function send(o){ ws.send(JSON.stringify(o)); }
+function register(){
+  myId = $('myId').value.trim(); if(!myId) return;
+  if (!window.isSecureContext && !['localhost', '127.0.0.1', '::1'].includes(location.hostname)) {
+    status('This phone needs the app opened over HTTPS to use its microphone.');
+  }
+  ws = new WebSocket((location.protocol==='https:'?'wss':'ws')+'://'+location.host);
+  ws.onopen = () => send({type:'register', id:myId});
+  ws.onmessage = async e => {
+    const m = JSON.parse(e.data);
+    if (m.type==='registered'){ show('dialView'); $('me').textContent='Your number: '+myId; }
+    else if (m.type==='error') status(m.msg);
+    else if (m.type==='unavailable'){ status('User is offline'); endCall(false); }
+    else if (m.type==='offer'){
+      if (pc || pendingOffer){ send({type:'reject', to:m.from}); return; } // busy
+      pendingOffer = m; peerId = m.from; showIncoming(); }
+    else if (m.type==='answer'){ clearTimeout(ringTimer); await pc.setRemoteDescription(m.sdp); flushIce(); status('Connecting…'); }
+    else if (m.type==='ice'){ pc && pc.remoteDescription ? pc.addIceCandidate(m.candidate) : pendingIce.push(m.candidate); }
+    else if (m.type==='reject'){ status('Call declined'); endCall(false); }
+    else if (m.type==='hangup'){ status('Call ended'); endCall(false); }
+    else if (m.type==='caption'){ handleRemoteCaption(m); }
+  };
+  ws.onclose = () => status('Disconnected from server');
+}
+function flushIce(){ pendingIce.forEach(c=>pc.addIceCandidate(c)); pendingIce=[]; }
+
+/* ===== CALL FLOW ===== */
+async function makePC(){
+  if (!window.isSecureContext || !navigator.mediaDevices?.getUserMedia) {
+    throw new Error('secure-context');
+  }
+  localStream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, autoGainControl:true } });
+  pc = new RTCPeerConnection({ iceServers: await loadIceServers() });
+  localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
+  pc.onicecandidate = e => e.candidate && send({type:'ice', to:peerId, candidate:e.candidate});
+  pc.onicecandidateerror = e => console.warn('[WebRTC] ICE candidate error:', e.errorCode, e.errorText, e.url);
+  pc.ontrack = e => {
+    remoteStream = e.streams[0] || new MediaStream([e.track]);
+    $('remoteAudio').srcObject = remoteStream;
+    try { $('remoteAudio').play(); } catch(err) {}
+    tapStream(remoteStream,'remote',$('lvlRemote'));
+    if (pc && pc.connectionState === 'connected') {
+      setupAudioWorklet();
+    }
+  };
+  pc.onconnectionstatechange = () => {
+    const activePc = pc;
+    if (!activePc) return;
+    console.log('[WebRTC] Connection state:', activePc.connectionState, 'ICE:', activePc.iceConnectionState);
+    if (activePc.connectionState === 'connected') {
+      clearTimeout(connectionTimer);
+      onConnected();
+    } else if (activePc.connectionState === 'disconnected' || activePc.connectionState === 'failed') {
+      const failed = activePc.connectionState === 'failed';
+      status(failed ? 'Network connection failed. Checking…' : 'Network interrupted. Trying to recover…');
+      clearTimeout(connectionTimer);
+      connectionTimer = setTimeout(() => {
+        if (pc !== activePc || activePc.connectionState === 'connected') return;
+        diagnoseIceFailure(activePc).then(message => {
+          if (pc !== activePc) return;
+          status(message);
+          endCall(false);
+        });
+      }, failed ? 4000 : 12000);
+    } else if (activePc.connectionState === 'closed') {
+      endCall(false);
+    }
+  };
+  tapStream(localStream,'local',$('lvlLocal'));
+}
+async function loadIceServers() {
+  try {
+    const response = await fetch('/api/ice', { cache: 'no-store' });
+    if (!response.ok) throw new Error(`ICE config HTTP ${response.status}`);
+    const config = await response.json();
+    if (!Array.isArray(config.iceServers) || !config.iceServers.length) throw new Error('Empty ICE server list');
+    console.info('[WebRTC] ICE servers loaded:', config.iceServers.map(s => s.urls));
+    return config.iceServers;
+  } catch (error) {
+    console.warn('[WebRTC] Could not load server ICE config; using STUN only:', error);
+    return DEFAULT_ICE_SERVERS;
+  }
+}
+async function diagnoseIceFailure(activePc) {
+  try {
+    const stats = await activePc.getStats();
+    const candidates = [...stats.values()].filter(s => s.type === 'local-candidate' || s.type === 'remote-candidate');
+    const pairs = [...stats.values()].filter(s => s.type === 'candidate-pair' && (s.selected || s.nominated || s.state === 'succeeded'));
+    const types = [...new Set(candidates.map(c => `${c.candidateType}${c.relayProtocol ? '/' + c.relayProtocol : ''}`))];
+    const selected = pairs.map(pair => {
+      const local = stats.get(pair.localCandidateId);
+      const remote = stats.get(pair.remoteCandidateId);
+      return `${local?.candidateType || '?'} ↔ ${remote?.candidateType || '?'}`;
+    });
+    console.error('[WebRTC] ICE diagnostics:', { iceState: activePc.iceConnectionState, candidates: types, selectedPairs: selected });
+    if (!candidates.some(c => c.candidateType === 'relay')) {
+      return 'No TURN relay was found. Add working TURN credentials, then restart the server and retry.';
+    }
+    return 'A TURN relay was found, but the network blocked the media route. Try both devices on the same Wi-Fi or a different network.';
+  } catch (error) {
+    console.error('[WebRTC] Could not collect ICE diagnostics:', error);
+    return 'Call could not connect. Check the HTTPS link, TURN settings, and both devices’ networks.';
+  }
+}
+async function startCall(){
+  peerId = $('toId').value.trim(); if(!peerId||peerId===myId) return;
+  isCaller = true;
+  showCall('Calling…'); await activateAudioContext();
+  try { await makePC(); } catch(e){ status(mediaAccessError(e)); return endCall(false); }
+  const offer = await pc.createOffer(); await pc.setLocalDescription(offer);
+  send({type:'offer', to:peerId, sdp:pc.localDescription});
+  ringTimer = setTimeout(()=>{ status('No answer'); endCall(true); }, 45000);
+}
+function showIncoming(){ showCall('Incoming call…'); $('acceptBtn').classList.remove('hidden'); }
+async function acceptCall(){
+  isCaller = false;
+  $('acceptBtn').classList.add('hidden'); status('Connecting…');
+  await activateAudioContext();
+  try { await makePC(); } catch(e){ status(mediaAccessError(e)); return endCall(true); }
+  await pc.setRemoteDescription(pendingOffer.sdp); flushIce(); pendingOffer=null;
+  const ans = await pc.createAnswer(); await pc.setLocalDescription(ans);
+  send({type:'answer', to:peerId, sdp:pc.localDescription});
+}
+function onConnected(){
+  status(''); startTs=Date.now(); clearInterval(tick); $('muteBtn').classList.remove('hidden'); $('meters').classList.remove('hidden');
+  tick=setInterval(()=>{ const s=Math.floor((Date.now()-startTs)/1000);
+    $('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
+  startAIAnalysis();
+}
+function toggleMute(){ const t=localStream.getAudioTracks()[0]; t.enabled=!t.enabled;
+  $('muteBtn').classList.toggle('on',!t.enabled); $('muteBtn').textContent=t.enabled?'🎤':'🔇'; }
+function endCall(notify){
+  if (notify && peerId){ send({type: pendingOffer?'reject':'hangup', to:peerId}); }
+  clearTimeout(ringTimer); clearTimeout(connectionTimer); clearInterval(tick);
+  stopAIAnalysis();
+  [localStream, remoteStream].forEach(s => { if(s){ s._rec && s._rec.state!=='inactive' && s._rec.stop(); s.getTracks().forEach(t=>t.stop()); }});
+  pc && pc.close(); pc=localStream=remoteStream=pendingOffer=null; pendingIce=[]; peerId=null;
+  $('timer').textContent=''; $('muteBtn').classList.add('hidden'); $('acceptBtn').classList.add('hidden'); $('meters').classList.add('hidden');
+  $('muteBtn').classList.remove('on'); $('muteBtn').textContent='🎤';
+  show('dialView');
+}
+
+function mediaAccessError(error) {
+  if (error?.message === 'secure-context' || !window.isSecureContext) {
+    return 'Microphone access needs HTTPS on this device. Open the app using its HTTPS link.';
+  }
+  if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
+    return 'Microphone permission was denied. Allow microphone access in browser settings and try again.';
+  }
+  if (error?.name === 'NotFoundError' || error?.name === 'DevicesNotFoundError') {
+    return 'No microphone was found on this device.';
+  }
+  console.error('[WebRTC] Microphone setup failed:', error);
+  return 'Could not start the microphone. Check browser permission and try again.';
+}
+
+async function activateAudioContext() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) throw new Error('Web Audio is unavailable in this browser.');
+    audioCtx = audioCtx || new AudioContextClass();
+    if (audioCtx.state !== 'running') await audioCtx.resume();
+    console.info('[Audio] Context state:', audioCtx.state, 'sample rate:', audioCtx.sampleRate);
+  } catch (error) {
+    console.warn('[Audio] Could not activate audio context from the call action:', error);
+  }
+}
+
+/* ===== AI SCAM SHIELD INTEGRATION ===== */
+let aiWs = null, aiWorkletNode = null, aiAudioSource = null, aiReconnectTimer = null, aiReconnectDelay = 2000, callId = null;
+
+function toggleShieldBody() {
+  const b = $('shieldBody');
+  b.style.display = (b.style.display === 'none') ? 'block' : 'none';
+}
+
+function updateShieldStatus(state, msg) {
+  const dot = $('shieldDot');
+  const txt = $('shieldStatusText');
+  if (dot) dot.className = 'dot ' + (state || '');
+  if (txt) txt.textContent = msg || state;
+}
+
+async function startAIAnalysis() {
+  callId = [myId, peerId].sort().join('-');
+  typedTactics = [];
+  fetch('/analyze_text', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ call_id: callId, reset: true }) }).catch(() => {});
+  $('shieldPanel').classList.remove('hidden');
+  if (BROWSER_ASR) {
+    // Chrome Marathi speech: the CALLER's browser transcribes their own voice and sends the text over;
+    // the RECEIVER's browser analyses it for scam tactics.
+    if (isCaller) {
+      updateShieldStatus('listening', 'Your voice is being sent as text for scam analysis');
+      startBrowserASR();
+    } else {
+      updateShieldStatus('listening', 'Listening to caller (Marathi speech)');
+    }
+    return;
+  }
+  updateShieldStatus('connecting', 'Connecting to caller audio…');
+  connectAIWebSocket();
+  setupAudioWorklet();
+}
+
+/* ===== CHROME SPEECH RECOGNITION (Marathi) ===== */
+let asr = null, asrWanted = false;
+function startBrowserASR() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) { updateShieldStatus('error', 'Open this page in Google Chrome for speech'); return; }
+  stopBrowserASR();
+  asrWanted = true;
+  asr = new SR();
+  asr.lang = $('asrLang').value || 'mr-IN';
+  asr.continuous = true;
+  asr.interimResults = true;
+  asr.maxAlternatives = 1;
+  asr.onresult = ev => {
+    let interim = '';
+    for (let i = ev.resultIndex; i < ev.results.length; i++) {
+      const r = ev.results[i];
+      const text = (r[0].transcript || '').trim();
+      if (r.isFinal) {
+        if (text) {
+          console.log('[ASR final]', asr.lang, text);
+          if (peerId) send({ type: 'caption', to: peerId, text, lang: asr.lang });
+          renderTranscript({ id: 'me' + Date.now(), text, lang: 'you' });
+        }
+      } else {
+        interim += text + ' ';
+      }
+    }
+    $('asrLive').textContent = interim ? ('… ' + interim) : '';
+  };
+  asr.onerror = e => {
+    console.warn('[ASR error]', e.error);
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      asrWanted = false;
+      updateShieldStatus('error', 'Speech permission blocked in Chrome');
+    } else if (e.error === 'network') {
+      updateShieldStatus('error', 'Chrome speech needs internet');
+    }
+  };
+  asr.onend = () => {
+    if (asrWanted && pc) { try { asr.start(); } catch (err) {} }
+  };
+  try { asr.start(); } catch (err) { console.warn('[ASR start]', err); }
+}
+function stopBrowserASR() {
+  asrWanted = false;
+  if (asr) { try { asr.abort(); } catch (e) {} asr = null; }
+  const live = $('asrLive'); if (live) live.textContent = '';
+}
+function handleRemoteCaption(m) {
+  const text = (m.text || '').trim();
+  if (!text) return;
+  const lang = (m.lang || 'mr-IN').split('-')[0];
+  renderTranscript({ id: 'c' + Date.now(), text, lang });
+  analyzeCallerText(text, lang);
+}
+
+function connectAIWebSocket() {
+  if (!callId) return;
+  const proto = (location.protocol === 'https:') ? 'wss:' : 'ws:';
+  const wsUrl = `${proto}//${location.host}/ws/analyze/${encodeURIComponent(callId)}`;
+  try {
+    aiWs = new WebSocket(wsUrl);
+    aiWs.binaryType = 'arraybuffer';
+
+    aiWs.onopen = () => {
+      aiReconnectDelay = 2000;
+      updateShieldStatus('listening', 'Listening to caller');
+      aiWs.send(JSON.stringify({ type: 'start', call_id: callId, sample_rate: 16000 }));
+      setupAudioWorklet();
+    };
+
+    aiWs.onmessage = e => {
+      try {
+        const data = JSON.parse(e.data);
+        handleAIMessage(data);
+      } catch (err) {
+        console.warn('AI WS message parse error:', err);
+      }
+    };
+
+    aiWs.onclose = () => {
+      if (pc && pc.connectionState === 'connected') {
+        updateShieldStatus('error', 'AI Offline (retrying)');
+        scheduleAIRetry();
+      } else {
+        updateShieldStatus('', 'Disconnected');
+      }
+    };
+
+    aiWs.onerror = () => {
+      updateShieldStatus('error', 'AI Offline');
+      if (aiWs) aiWs.close();
+    };
+  } catch (err) {
+    console.warn('AI WS connection error:', err);
+    scheduleAIRetry();
+  }
+}
+
+function scheduleAIRetry() {
+  clearTimeout(aiReconnectTimer);
+  if (!pc || pc.connectionState !== 'connected') return;
+  aiReconnectTimer = setTimeout(() => {
+    connectAIWebSocket();
+    aiReconnectDelay = Math.min(aiReconnectDelay * 1.5, 15000);
+  }, aiReconnectDelay);
+}
+
+let aiRemoteSource = null, aiSilentSink = null, aiWorkletSetup = null;
+
+async function setupAudioWorklet() {
+  if (aiWorkletSetup) return aiWorkletSetup;
+  aiWorkletSetup = (async () => {
+    audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') {
+      await audioCtx.resume();
+    }
+    await audioCtx.audioWorklet.addModule('pcm-worklet.js');
+
+    if (!aiWorkletNode) {
+      aiWorkletNode = new AudioWorkletNode(audioCtx, 'pcm-worklet-processor');
+      aiWorkletNode.port.onmessage = e => {
+        if (aiWs && aiWs.readyState === WebSocket.OPEN) {
+          aiWs.send(e.data); // binary 250ms Int16 PCM frame
+        }
+      };
+      aiWorkletNode.onprocessorerror = event => {
+        console.error('[Audio] PCM worklet processor failed:', event);
+        updateShieldStatus('error', 'Audio capture failed');
+      };
+      // Keep Web Audio clock active on mobile browsers (Android Chrome)
+      aiSilentSink = audioCtx.createGain();
+      aiSilentSink.gain.value = 0.0;
+      aiWorkletNode.connect(aiSilentSink);
+      aiSilentSink.connect(audioCtx.destination);
+    }
+
+    // Connect remote caller voice
+    if (remoteStream && !aiRemoteSource) {
+      aiRemoteSource = audioCtx.createMediaStreamSource(remoteStream);
+      aiRemoteSource.connect(aiWorkletNode);
+    }
+
+    console.info('[Audio] Analysis graph ready:', {
+      contextState: audioCtx.state,
+      remoteTracks: remoteStream?.getAudioTracks().map(t => ({ state: t.readyState, muted: t.muted }))
+    });
+  })();
+  try {
+    await aiWorkletSetup;
+  } catch (err) {
+    console.warn('AudioWorklet setup error:', err);
+    updateShieldStatus('error', 'Audio capture unavailable');
+  } finally {
+    aiWorkletSetup = null;
+  }
+}
+
+function handleAIMessage(m) {
+  if (m.type === 'status') {
+    updateShieldStatus(m.state, m.state === 'listening' ? 'Listening to caller' : (m.state === 'degraded' ? 'Degraded' : m.state));
+    if (m.audio_bytes !== undefined) {
+      const kb = (m.audio_bytes / 1024).toFixed(1);
+      $('shieldBytes').textContent = kb + ' KB';
+    }
+  } else if (m.type === 'transcript') {
+    renderTranscript(m);
+  } else if (m.type === 'tactics') {
+    renderTactics(m.items || []);
+  } else if (m.type === 'risk') {
+    renderRisk(m);
+  } else if (m.type === 'alert') {
+    renderAlert(m);
+  }
+}
+
+function renderTranscript(m) {
+  const box = $('shieldTranscript');
+  if (box.firstElementChild && box.firstElementChild.style.fontStyle === 'italic') {
+    box.innerHTML = '';
+  }
+  const div = document.createElement('div');
+  div.id = 'utt_' + m.id;
+  div.className = 'utt';
+  const timeStr = (m.t0 !== undefined) ? `<span class="t0">${m.t0.toFixed(1)}s</span>` : '';
+  div.innerHTML = `${timeStr}<span class="lg">${m.lang||'auto'}</span><span class="utt-text">${escapeHtml(m.text)}</span>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function renderTactics(tactics) {
+  const chips = $('shieldChips');
+  chips.innerHTML = '';
+  tactics.forEach(t => {
+    const chip = document.createElement('span');
+    chip.className = 'tactic-chip';
+    const timeLabel = t.t ? ` [${t.t.toFixed(0)}s]` : '';
+    chip.textContent = `${t.tactic.replace(/_/g, ' ')}${timeLabel} (${Math.round(t.confidence*100)}%)`;
+    chip.title = t.explanation || '';
+    chips.appendChild(chip);
+
+    if (t.evidence && t.evidence.length > 3) {
+      highlightEvidenceInTranscript(t.evidence);
+    }
+  });
+}
+
+function highlightEvidenceInTranscript(evidence) {
+  const spans = document.querySelectorAll('.utt-text');
+  spans.forEach(el => {
+    const raw = el.textContent;
+    if (raw.toLowerCase().includes(evidence.toLowerCase())) {
+      const idx = raw.toLowerCase().indexOf(evidence.toLowerCase());
+      const matched = raw.substring(idx, idx + evidence.length);
+      el.innerHTML = escapeHtml(raw.substring(0, idx)) +
+        `<span class="highlight-tactic">${escapeHtml(matched)}</span>` +
+        escapeHtml(raw.substring(idx + evidence.length));
+    }
+  });
+}
+
+function renderRisk(r) {
+  const score = Math.round(r.score || 0);
+  const bar = $('shieldRiskBar');
+  const txt = $('shieldRiskText');
+  if (bar) bar.style.width = score + '%';
+  if (txt) txt.textContent = `${score}% (${r.level || 'Low'})`;
+
+  let color = '#34c759', ink = '#1f8a3b';
+  if (score > 80) {
+    color = '#ff3b30'; ink = '#d70015';
+  } else if (score > 60) {
+    color = '#ff6b00'; ink = '#b34700';
+  } else if (score > 30) {
+    color = '#ff9f0a'; ink = '#b25e00';
+  }
+
+  if (bar) bar.style.background = color;
+  if (txt) txt.style.color = ink;
+}
+
+function renderAlert(a) {
+  const box = $('shieldAlert');
+  box.className = 'alert-box ' + (a.level ? a.level.toLowerCase() : '');
+  $('shieldAlertMsg').textContent = a.message || 'Monitoring caller…';
+  $('shieldAlertAction').textContent = a.action || '';
+  if (a.level === 'Critical') {
+    if (navigator.vibrate) {
+      try { navigator.vibrate([250, 100, 250]); } catch(e) {}
+    }
+    playAlertTone();
+  }
+}
+
+function playAlertTone() {
+  try {
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.3);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  } catch(e) {}
+}
+
+
+/* ===== TYPED-TEXT FALLBACK (demo without microphone) ===== */
+let typedTactics = [];
+async function analyzeCallerText(text, lang) {
+  const id = callId || 'demo';
+  try {
+    const r = await fetch('/analyze_text', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ call_id: id, text, lang: lang || 'en' })
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(d.error);
+    (d.tactics || []).forEach(t => typedTactics.push({ ...t, t: 0 }));
+    renderTactics(typedTactics);
+    renderRisk(d.risk || {});
+    renderAlert({ level: (d.risk || {}).level, message: (d.alert || {}).message, action: (d.alert || {}).action });
+  } catch (err) {
+    console.warn('Text analysis failed:', err);
+    updateShieldStatus('error', 'AI Offline');
+  }
+}
+async function sendTypedText(ev) {
+  ev.preventDefault();
+  const input = $('typedInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  renderTranscript({ id: 'typed' + Date.now(), text, lang: 'typed' });
+  analyzeCallerText(text, /[\u0900-\u097F]/.test(text) ? 'mr' : 'en');
+}
+
+function escapeHtml(str) {
+  return (str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function stopAIAnalysis() {
+  stopBrowserASR();
+  clearTimeout(aiReconnectTimer);
+  if (aiWs) {
+    try {
+      if (aiWs.readyState === WebSocket.OPEN) {
+        aiWs.send(JSON.stringify({ type: 'stop' }));
+      }
+      aiWs.close();
+    } catch(e) {}
+    aiWs = null;
+  }
+  if (aiWorkletNode) {
+    try { aiWorkletNode.disconnect(); } catch(e) {}
+    aiWorkletNode = null;
+  }
+  if (aiRemoteSource) {
+    try { aiRemoteSource.disconnect(); } catch(e) {}
+    aiRemoteSource = null;
+  }
+  if (aiSilentSink) {
+    try { aiSilentSink.disconnect(); } catch(e) {}
+    aiSilentSink = null;
+  }
+  callId = null;
+  $('shieldPanel').classList.add('hidden');
+}
+
+/* ===== UI ===== */
+function show(v){ ['loginView','dialView','callView'].forEach(x=>$(x).classList.toggle('hidden',x!==v)); }
+function showCall(s){ show('callView'); $('peer').textContent=peerId; status(s); }
+function status(s){ $('status').textContent=s; }
+
+/* =====================================================================
+   UI LAYER — tabs, dashboard, history.
+   Everything above is the original call + Scam Shield logic. The code
+   below only wraps it to (a) switch tabs and (b) record real call data
+   in this browser's localStorage. No data is invented: empty = empty.
+   ===================================================================== */
+(function () {
+  'use strict';
+  const HKEY = () => 'callapp.history.v1.' + (typeof myId !== 'undefined' && myId ? myId : 'anon');
+  let history = [], attempt = null, hFilter = 'all', openId = null, tab = 'dashboard';
+
+  /* ---------- storage ---------- */
+  function loadHistory() { try { history = JSON.parse(localStorage.getItem(HKEY()) || '[]'); } catch (e) { history = []; } if (!Array.isArray(history)) history = []; }
+  function saveHistory() { try { localStorage.setItem(HKEY(), JSON.stringify(history.slice(0, 200))); } catch (e) {} }
+
+  /* ---------- helpers ---------- */
+  const levelOf = s => s > 80 ? 'Critical' : s > 60 ? 'High' : s > 30 ? 'Medium' : 'Low';
+  const rank = { Low: 0, Medium: 1, High: 2, Critical: 3 };
+  const col = { Low: '#34c759', Medium: '#ff9f0a', High: '#ff6b00', Critical: '#ff3b30' };
+  const esc = s => escapeHtml(String(s == null ? '' : s));
+  const nice = n => { n = String(n || '').replace(/_/g, ' '); return n.charAt(0).toUpperCase() + n.slice(1); };
+  function fmtDur(s) { s = Math.max(0, Math.round(s)); if (s < 60) return s + 's'; const m = Math.floor(s / 60), r = s % 60; if (m < 60) return m + 'm ' + String(r).padStart(2, '0') + 's'; return Math.floor(m / 60) + 'h ' + String(m % 60).padStart(2, '0') + 'm'; }
+  const fmtTime = ts => new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  function dayLabel(ts) {
+    const d = new Date(ts), t = new Date(); const a = new Date(d.getFullYear(), d.getMonth(), d.getDate()), b = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+    const diff = Math.round((b - a) / 864e5);
+    if (diff === 0) return 'Today'; if (diff === 1) return 'Yesterday';
+    return d.toLocaleDateString([], { weekday: 'long', day: 'numeric', month: 'long', year: d.getFullYear() === t.getFullYear() ? undefined : 'numeric' });
+  }
+  const isFlagged = r => r.analysed && r.maxScore > 30;
+  const connected = r => r.outcome === 'Completed';
+
+  const ICON = {
+    out: '<svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8"/></svg>',
+    in: '<svg viewBox="0 0 24 24"><path d="M17 7L7 17M15 17H7V9"/></svg>',
+    miss: '<svg viewBox="0 0 24 24"><path d="M17 7L7 17M15 17H7V9"/></svg>',
+    chev: '<svg class="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>'
+  };
+
+  /* ---------- tabs ---------- */
+  function setTab(t) {
+    tab = t;
+    ['dashboard', 'live', 'history'].forEach(n => {
+      $('panel-' + n).classList.toggle('hidden', n !== t);
+      const b = document.querySelector('[data-tab="' + n + '"]');
+      b.classList.toggle('active', n === t); b.setAttribute('aria-selected', n === t);
+    });
+    if (t === 'dashboard') renderDashboard();
+    if (t === 'history') renderHistory();
+    if (t === 'live') renderRecents();
+    window.scrollTo(0, 0);
+  }
+  window.setTab = setTab;
+
+  /* ---------- wrap original functions (originals are kept untouched) ---------- */
+  const _show = show;
+  show = function (v) {
+    _show(v);
+    const inApp = v !== 'loginView';
+    $('appShell').classList.toggle('hidden', !inApp);
+    if (inApp) {
+      if (!window.__appReady) { window.__appReady = true; loadHistory(); }
+      $('whoNum').textContent = myId || '—';
+      $('whoDot').classList.toggle('on', !!(ws && ws.readyState === 1));
+      $('liveDot').classList.toggle('hidden', v !== 'callView');
+      if (v === 'dialView' && tab !== 'live') renderRecents();
+      renderDashboardIfVisible();
+    }
+  };
+
+  const _showCall = showCall;
+  showCall = function (s) {
+    _showCall(s);
+    if (!attempt) attempt = { peer: peerId, dir: s === 'Incoming call…' ? 'in' : 'out', ts: Date.now(), connectedAt: null, maxScore: 0, analysed: false, tactics: {}, alert: null, lines: [], convo: [] };
+    setTab('live');
+  };
+
+  const _onConnected = onConnected;
+  onConnected = function () {
+    _onConnected();
+    if (attempt && !attempt.connectedAt) { attempt.connectedAt = Date.now(); if (attempt.dir === 'in') attempt.analysed = true; }
+  };
+
+  const _renderRisk = renderRisk;
+  renderRisk = function (r) {
+    _renderRisk(r);
+    if (!attempt) return;
+    attempt.analysed = true;
+    const s = Math.round((r && r.score) || 0);
+    if (s > attempt.maxScore) attempt.maxScore = s;
+  };
+
+  const _renderTactics = renderTactics;
+  renderTactics = function (list) {
+    _renderTactics(list);
+    if (!attempt) return;
+    (list || []).forEach(t => { if (t && t.tactic) attempt.tactics[t.tactic] = Math.max(attempt.tactics[t.tactic] || 0, t.confidence || 0); });
+  };
+
+  const _renderAlert = renderAlert;
+  renderAlert = function (a) {
+    _renderAlert(a);
+    if (!attempt || !a || !a.level || !a.message) return;
+    const cur = attempt.alert ? rank[attempt.alert.level] || 0 : -1;
+    if ((rank[a.level] || 0) > 0 && (rank[a.level] || 0) >= cur) attempt.alert = { level: a.level, message: a.message, action: a.action || '' };
+  };
+
+  const _renderTranscript = renderTranscript;
+  renderTranscript = function (m) {
+    _renderTranscript(m);
+    if (attempt && m && m.lang !== 'you' && m.text && attempt.lines.length < 60) attempt.lines.push(String(m.text).slice(0, 400));
+    if (attempt && m && m.text && attempt.convo.length < 200) attempt.convo.push({ who: m.lang === 'you' ? 'You' : 'Caller', text: String(m.text).slice(0, 600), t: Date.now() });
+  };
+
+  const _endCall = endCall;
+  endCall = function (notify) {
+    let rec = null;
+    try { const n = history.length; finalize(notify); if (history.length > n) rec = history[0]; } catch (e) { console.warn('[history]', e); }
+    _endCall(notify);
+    if (rec && isScamCall(rec)) { try { onScamCallEnded(rec); } catch (err) { console.warn('[report]', err); } }
+    $('liveDot').classList.add('hidden');
+    renderDashboardIfVisible();
+    if (tab === 'history') renderHistory();
+    if (tab === 'live') renderRecents();
+  };
+
+  function finalize(notify) {
+    if (!attempt) return;
+    const a = attempt; attempt = null;
+    const st = ($('status').textContent || '');
+    const wasPending = !!pendingOffer;
+    let outcome;
+    if (a.connectedAt) outcome = 'Completed';
+    else if (/icrophone/i.test(st) || /could not/i.test(st)) outcome = 'Failed';
+    else if (a.dir === 'out') outcome = /declined/i.test(st) ? 'Declined' : /offline/i.test(st) ? 'Unavailable' : /No answer/i.test(st) ? 'No answer' : 'Cancelled';
+    else outcome = (notify && wasPending) ? 'Declined' : 'Missed';
+    const tactics = Object.keys(a.tactics).map(k => ({ name: k, conf: a.tactics[k] })).sort((x, y) => y.conf - x.conf);
+    history.unshift({
+      id: a.ts + '-' + Math.random().toString(36).slice(2, 6), peer: a.peer || '—', dir: a.dir, ts: a.ts, outcome,
+      dur: a.connectedAt ? (Date.now() - a.connectedAt) / 1000 : 0,
+      analysed: !!a.analysed && !!a.connectedAt, maxScore: a.maxScore, level: levelOf(a.maxScore),
+      tactics, alert: a.alert, lines: a.lines, convo: a.convo || []
+    });
+    saveHistory();
+  }
+
+  /* ---------- dashboard ---------- */
+  function renderDashboardIfVisible() { if (tab === 'dashboard' && !$('panel-dashboard').classList.contains('hidden')) renderDashboard(); }
+
+  async function renderShieldStatus() {
+    const card = $('shieldStatusCard'); if (!card) return;
+    const inCall = !!attempt && !!attempt.connectedAt;
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let mic = 'unknown';
+    try { mic = (await navigator.permissions.query({ name: 'microphone' })).state; } catch (e) {}
+    const link = !!(ws && ws.readyState === 1);
+    const chk = (cls, k, v) => `<span class="check ${cls}"><i></i>${k} <b>${v}</b></span>`;
+    const micTxt = { granted: 'Allowed', prompt: 'Asks on first call', denied: 'Blocked', unknown: 'Unknown' }[mic] || 'Unknown';
+    const state = inCall ? 'live' : (SR && link && mic !== 'denied') ? 'ok' : 'warn';
+    const title = inCall ? 'Protecting your call with ' + esc(attempt.peer) : state === 'ok' ? 'Scam Shield is ready' : 'Scam Shield needs attention';
+    const sub = inCall ? 'Speech is being analysed for scam tactics right now.' :
+      state === 'ok' ? 'It switches on automatically when a call connects.' :
+      !SR ? 'Open CallApp in Google Chrome so speech can be analysed.' : mic === 'denied' ? 'Allow microphone access in your browser settings.' : 'Connection to the call server was lost. Reload the page.';
+    card.innerHTML = `<div class="shield-ico ${state === 'ok' ? '' : state}"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <div class="txt"><h3>${title}</h3><p class="cap">${sub}</p></div>
+      <div class="checks">${chk(link ? 'ok' : 'bad', 'Server', link ? 'Connected' : 'Offline')}${chk(mic === 'granted' ? 'ok' : mic === 'denied' ? 'bad' : 'warn', 'Microphone', micTxt)}${chk(SR ? 'ok' : 'bad', 'Speech', SR ? 'Chrome' : 'Unsupported')}</div>`;
+  }
+
+  function renderDashboard() {
+    const h = new Date().getHours();
+    $('greet').textContent = h < 5 ? 'Good night' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+    $('greetSub').textContent = history.length ? 'Here is how your calls are doing.' : 'Your call activity will appear here.';
+    renderShieldStatus();
+
+    const done = history.filter(connected);
+    const talk = done.reduce((t, r) => t + (r.dur || 0), 0);
+    const flagged = history.filter(isFlagged);
+    const analysed = history.filter(r => r.analysed);
+    const peak = analysed.length ? Math.max.apply(null, analysed.map(r => r.maxScore)) : null;
+    const peakLvl = peak == null ? null : levelOf(peak);
+    const cat = r => !connected(r) ? 'other' : !r.analysed ? 'other' : r.maxScore > 60 ? 'scam' : r.maxScore > 30 ? 'sus' : 'safe';
+    const CC = { safe: '#34c759', sus: '#ff9f0a', scam: '#ff3b30', other: '#d1d1d6' };
+    const CN = { safe: 'Safe', sus: 'Suspicious', scam: 'Scam', other: 'Not analysed / not connected' };
+    const counts = { safe: 0, sus: 0, scam: 0, other: 0 }; history.forEach(r => counts[cat(r)]++);
+    const st = (k, v, s, cls) => `<div class="stat"><div class="k">${k}</div><div class="v ${cls || ''}">${v}</div><div class="s">${s}</div></div>`;
+    $('statGrid').innerHTML =
+      st('Total calls', history.length, done.length + ' connected, ' + (history.length - done.length) + ' not connected') +
+      st('Scam calls', counts.scam, counts.sus + ' suspicious · ' + counts.safe + ' safe', counts.scam ? 'c-red' : 'c-green') +
+      st('Talk time', done.length ? fmtDur(talk) : '0s', done.length ? 'Avg ' + fmtDur(talk / done.length) + ' per call' : 'No connected calls') +
+      st('Peak risk', peak == null ? '—' : peak + '%', peakLvl ? peakLvl : 'No data yet', peakLvl === 'Critical' || peakLvl === 'High' ? 'c-red' : peakLvl === 'Medium' ? 'c-orange' : peak == null ? '' : 'c-green');
+
+    // calls over last 7 days (stacked)
+    const days = []; for (let i = 6; i >= 0; i--) { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - i); days.push(d); }
+    const per = days.map(d => { const n = new Date(d); n.setDate(n.getDate() + 1); const c = { safe: 0, sus: 0, scam: 0, other: 0 }; history.forEach(r => { if (r.ts >= d.getTime() && r.ts < n.getTime()) c[cat(r)]++; }); return c; });
+    const tot = per.map(c => c.safe + c.sus + c.scam + c.other), mxd = Math.max.apply(null, tot);
+    if (!mxd) {
+      $('weekCard').innerHTML = '<h3>Calls this week</h3><p class="cap">Last 7 days, by outcome</p><div class="empty"><b>No calls in the last 7 days</b>Daily call counts appear here.</div>';
+    } else {
+      $('weekCard').innerHTML = '<h3>Calls this week</h3><p class="cap">Last 7 days, by outcome</p><div class="wk">' + per.map((c, i) =>
+        `<div class="d"><div class="num">${tot[i] || ''}</div><div class="stack" style="height:${Math.round(tot[i] / mxd * 100)}%">` +
+        ['safe', 'sus', 'scam', 'other'].map(k => c[k] ? `<i style="flex:${c[k]};background:${CC[k]}"></i>` : '').join('') + '</div></div>').join('') + '</div>' +
+        '<div class="wk-l">' + days.map(d => `<span>${d.toLocaleDateString([], { weekday: 'short' })}</span>`).join('') + '</div>' +
+        '<div class="legend">' + ['safe', 'sus', 'scam', 'other'].map(k => `<span><i style="background:${CC[k]}"></i>${CN[k]}</span>`).join('') + '</div>';
+    }
+    // outcome mix
+    if (!history.length) {
+      $('mixCard').innerHTML = '<h3>Call safety</h3><p class="cap">All calls on this device</p><div class="empty"><b>No data yet</b>Safety breakdown appears after your first call.</div>';
+    } else {
+      const n = history.length;
+      $('mixCard').innerHTML = '<h3>Call safety</h3><p class="cap">All calls on this device</p><div class="mixbar">' +
+        ['safe', 'sus', 'scam', 'other'].map(k => counts[k] ? `<i style="width:${counts[k] / n * 100}%;background:${CC[k]}"></i>` : '').join('') + '</div>' +
+        ['safe', 'sus', 'scam', 'other'].map(k => `<div class="mixrow"><i style="background:${CC[k]}"></i><span>${CN[k]}</span><span>${counts[k]} (${Math.round(counts[k] / n * 100)}%)</span></div>`).join('');
+    }
+
+    // risk per call
+    const recent = analysed.slice(0, 12).reverse();
+    if (!recent.length) {
+      $('chartCard').innerHTML = '<h3>Risk by call</h3><p class="cap">Peak scam risk of each protected call</p><div class="empty"><b>No protected calls yet</b>Risk scores appear after a connected call.</div>';
+    } else {
+      $('chartCard').innerHTML = '<h3>Risk by call</h3><p class="cap">Peak scam risk of your last ' + recent.length + ' protected call' + (recent.length > 1 ? 's' : '') + '</p>' +
+        '<div class="bars">' + recent.map(r => `<div class="bar" title="${esc(r.peer)} — ${r.maxScore}% (${r.level})"><i style="height:${Math.max(r.maxScore, 3)}%;background:${col[r.level]}"></i></div>`).join('') + '</div>' +
+        '<div class="bar-labels">' + recent.map(r => `<span>${r.maxScore}</span>`).join('') + '</div>' +
+        '<div class="legend">' + ['Low', 'Medium', 'High', 'Critical'].map(l => `<span><i style="background:${col[l]}"></i>${l}</span>`).join('') + '</div>';
+    }
+
+    // tactics
+    const tc = {}; history.forEach(r => (r.tactics || []).forEach(t => { tc[t.name] = (tc[t.name] || 0) + 1; }));
+    const top = Object.keys(tc).map(k => ({ k, n: tc[k] })).sort((a, b) => b.n - a.n).slice(0, 5);
+    if (!top.length) {
+      $('tacticCard').innerHTML = '<h3>Tactics detected</h3><p class="cap">Manipulation patterns found in calls</p><div class="empty"><b>Nothing detected</b>No scam tactics have been seen on this device.</div>';
+    } else {
+      const mx = top[0].n;
+      $('tacticCard').innerHTML = '<h3>Tactics detected</h3><p class="cap">Number of calls each tactic appeared in</p>' +
+        top.map(t => `<div class="hbar"><div class="hbar-row"><span>${esc(nice(t.k))}</span><span>${t.n}</span></div><div class="hbar-track"><i style="width:${Math.round(t.n / mx * 100)}%"></i></div></div>`).join('');
+    }
+
+    // recent
+    const rc = history.slice(0, 4);
+    $('recentList').innerHTML = rc.length ? '<div class="list">' + rc.map(r => rowHTML(r, false)).join('') + '</div>'
+      : '<div class="card"><div class="empty"><b>No calls yet</b>Make or receive a call and it will show up here.</div></div>';
+  }
+
+  /* ---------- rows ---------- */
+  function rowHTML(r, expandable) {
+    const bad = r.outcome !== 'Completed';
+    const icon = bad ? ICON.miss : (r.dir === 'out' ? ICON.out : ICON.in);
+    const dirTxt = r.dir === 'out' ? 'Outgoing' : 'Incoming';
+    const sub = r.outcome === 'Completed' ? `${dirTxt} · ${fmtDur(r.dur)}` : `${dirTxt} · ${r.outcome}`;
+    const pill = r.analysed ? `<span class="pill ${r.level.toLowerCase()}">${r.level} · ${r.maxScore}%</span>` : (connected(r) ? '<span class="pill none">Not analysed</span>' : '');
+    return `<div class="row${openId === r.id && expandable ? ' open' : ''}" data-id="${esc(r.id)}">
+      <button class="row-head" ${expandable ? 'data-toggle' : 'data-open'}="${esc(r.id)}">
+        <span class="r-ico ${bad ? 'bad' : ''}">${icon}</span>
+        <span class="r-main"><div class="r-title ${bad ? 'bad' : ''}">${esc(r.peer)}</div><div class="r-sub">${sub}</div></span>
+        <span class="r-side">${pill}<span class="r-time">${fmtTime(r.ts)}</span>${ICON.chev}</span>
+      </button>${expandable ? detailHTML(r) : ''}</div>`;
+  }
+  function detailHTML(r) {
+    let h = '<div class="detail">';
+    if (r.analysed) {
+      h += `<div class="lbl">Peak scam risk</div><div class="dmeter"><i style="width:${r.maxScore}%;background:${col[r.level]}"></i></div>`;
+      if (r.alert) h += `<div class="lbl">Shield alert</div><div class="alert-note"><b style="font-weight:600">${esc(r.alert.message)}</b>${r.alert.action ? '<span>' + esc(r.alert.action) + '</span>' : ''}</div>`;
+      else h += '<div class="lbl">Shield alert</div><div class="alert-note">No warnings were raised on this call.</div>';
+      if (r.tactics && r.tactics.length) h += '<div class="lbl">Tactics detected</div><div class="chips-container">' + r.tactics.map(t => `<span class="tactic-chip">${esc(nice(t.name))} (${Math.round(t.conf * 100)}%)</span>`).join('') + '</div>';
+    } else if (connected(r)) h += '<div class="lbl">Analysis</div><div class="alert-note">Scam Shield analyses the incoming caller. No caller speech was analysed on this outgoing call.</div>';
+    else h += `<div class="lbl">Call</div><div class="alert-note">${esc(r.outcome)} — this call never connected.</div>`;
+    if (r.lines && r.lines.length) {
+      h += '<div class="lbl">Caller transcript</div><div class="lines">' + r.lines.slice(0, 6).map(l => `<div>${esc(l)}</div>`).join('') + (r.lines.length > 6 ? `<small>+ ${r.lines.length - 6} more</small>` : '') + '</div>';
+    }
+    h += `<div class="acts">${r.analysed ? `<button class="btn-fill" data-pdf="${esc(r.id)}">Download PDF</button>` : ''}<button class="btn-soft" data-report="${esc(r.id)}">Download report</button><button class="btn-soft" data-print="${esc(r.id)}">Print / PDF</button><button class="btn-soft" data-callback="${esc(r.peer)}">Call back</button><button class="btn-soft danger" data-del="${esc(r.id)}">Delete</button></div></div>`;
+    return h;
+  }
+
+  function renderHistory() {
+    let list = history;
+    if (hFilter === 'flagged') list = history.filter(isFlagged);
+    if (hFilter === 'missed') list = history.filter(r => !connected(r));
+    document.querySelectorAll('#histFilter button').forEach(b => b.classList.toggle('active', b.dataset.f === hFilter));
+    $('histSub').textContent = history.length ? history.length + ' call' + (history.length > 1 ? 's' : '') + ' on this device.' : 'Calls made and received on this device.';
+    if (!list.length) {
+      $('histList').innerHTML = '<div class="card"><div class="empty"><b>' + (history.length ? 'Nothing here' : 'No calls yet') + '</b>' + (history.length ? 'No calls match this filter.' : 'Your call history will appear here.') + '</div></div>';
+    } else {
+      let out = '', cur = '', open = false;
+      list.forEach(r => {
+        const d = dayLabel(r.ts);
+        if (d !== cur) { if (open) out += '</div>'; out += `<div class="day">${esc(d)}</div><div class="list">`; cur = d; open = true; }
+        out += rowHTML(r, true);
+      });
+      $('histList').innerHTML = out + (open ? '</div>' : '');
+    }
+    $('histFoot').innerHTML = history.length ? '<div class="hist-tools"><button class="btn-soft" data-csv>Export all (CSV)</button><button class="btn-soft danger" data-clear>Clear history</button></div>' : '';
+  }
+
+  function renderRecents() {
+    const seen = [], el = $('recentChips');
+    history.forEach(r => { if (r.peer && r.peer !== '—' && seen.indexOf(r.peer) < 0 && seen.length < 5) seen.push(r.peer); });
+    $('recents').classList.toggle('hidden', !seen.length);
+    el.innerHTML = seen.map(p => `<button class="chip-btn" data-callback="${esc(p)}">${esc(p)}</button>`).join('');
+  }
+
+  /* ---------- reports (for sending to authorities) ---------- */
+  function reportHTML(r) {
+    const when = new Date(r.ts), now = new Date();
+    const rid = 'CR-' + r.ts.toString(36).toUpperCase();
+    const sev = r.analysed ? r.level + ' (' + r.maxScore + '%)' : 'Not analysed';
+    const row = (k, v) => `<tr><th>${k}</th><td>${v}</td></tr>`;
+    const tact = r.tactics && r.tactics.length ? '<ul>' + r.tactics.map(t => `<li>${esc(nice(t.name))} — confidence ${Math.round(t.conf * 100)}%</li>`).join('') + '</ul>' : 'None detected.';
+    const lines = r.lines && r.lines.length ? '<ol>' + r.lines.map(l => `<li>${esc(l)}</li>`).join('') + '</ol>' : 'No caller speech was recorded in this log.';
+    return `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title>Suspected scam call report ${rid}</title><style>
+body{font-family:-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:#1d1d1f;max-width:780px;margin:40px auto;padding:0 24px;line-height:1.5}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:17px;margin:28px 0 8px;border-bottom:1px solid #ddd;padding-bottom:6px}
+.sub{color:#6e6e73;font-size:14px}table{border-collapse:collapse;width:100%}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid #eee;font-size:14px;vertical-align:top}
+th{width:34%;color:#6e6e73;font-weight:500}.sev{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:600;background:#f5f5f7}
+li{margin:4px 0;font-size:14px}.note{font-size:12px;color:#6e6e73;margin-top:30px;border-top:1px solid #ddd;padding-top:12px}
+.sig td{height:34px}@media print{body{margin:0}}</style></head><body>
+<h1>Suspected Scam Call Report</h1><div class="sub">Report ID ${rid} · Generated ${esc(now.toLocaleString())} by CallApp Scam Shield</div>
+<h2>1. Call details</h2><table>
+${row('Caller number / ID', esc(r.peer))}${row('Receiving number / ID', esc(myId || '—'))}${row('Direction', r.dir === 'out' ? 'Outgoing' : 'Incoming')}
+${row('Date and time', esc(when.toLocaleString()))}${row('Duration', r.outcome === 'Completed' ? esc(fmtDur(r.dur)) : '—')}${row('Outcome', esc(r.outcome))}</table>
+<h2>2. Automated analysis</h2><table>${row('Scam risk', '<span class="sev">' + esc(sev) + '</span>')}${row('Tactics detected', tact)}
+${row('System alert', r.alert ? esc(r.alert.message) + (r.alert.action ? '<br>Advice: ' + esc(r.alert.action) : '') : 'No warning was raised.')}</table>
+<h2>3. What the caller said</h2>${lines}
+<h2>4. Reporter details (fill in)</h2><table class="sig"><tr><th>Full name</th><td></td></tr><tr><th>Phone / email</th><td></td></tr><tr><th>Money lost (if any)</th><td></td></tr><tr><th>Signature &amp; date</th><td></td></tr></table>
+<div class="note">This report was generated automatically from speech recognition and rule-based analysis on the receiver's device. Transcripts may contain recognition errors and are not independently verified. In India, report cyber fraud at cybercrime.gov.in or call 1930 as soon as possible, and attach this report.</div>
+</body></html>`;
+  }
+  const byId = id => history.find(r => r.id === id);
+  function downloadReport(id) {
+    const r = byId(id); if (!r) return;
+    const d = new Date(r.ts), p = n => String(n).padStart(2, '0');
+    const name = 'scam-call-report-' + String(r.peer).replace(/[^\w-]/g, '') + '-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.html';
+    saveBlob(new Blob([reportHTML(r)], { type: 'text/html' }), name);
+  }
+  function printReport(id) {
+    const r = byId(id); if (!r) return;
+    const w = window.open('', '_blank'); if (!w) { status('Allow pop-ups to print the report, or use Download report.'); return; }
+    w.document.open(); w.document.write(reportHTML(r)); w.document.close(); w.focus(); setTimeout(() => { try { w.print(); } catch (e) {} }, 400);
+  }
+  function exportCSV() {
+    const q = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+    const rows = [['Date', 'Caller/Peer', 'Direction', 'Outcome', 'Duration (s)', 'Risk %', 'Risk level', 'Tactics', 'Alert']];
+    history.slice().reverse().forEach(r => rows.push([new Date(r.ts).toISOString(), r.peer, r.dir === 'out' ? 'Outgoing' : 'Incoming', r.outcome, Math.round(r.dur || 0), r.analysed ? r.maxScore : '', r.analysed ? r.level : '', (r.tactics || []).map(t => t.name).join('; '), r.alert ? r.alert.message : '']));
+    saveBlob(new Blob(['\ufeff' + rows.map(x => x.map(q).join(',')).join('\r\n')], { type: 'text/csv' }), 'callapp-history.csv');
+  }
+  function saveBlob(blob, name) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+
+  /* ---------- scam call -> PDF report (auto on call end) ---------- */
+  const isScamCall = r => r && r.dir === 'in' && r.analysed && r.maxScore > 60;
+
+  function buildPDF(r) {
+    const W = 1240, H = 1754, M = 96, pages = [];
+    const FONT = '"Segoe UI","Nirmala UI","Noto Sans Devanagari","Mangal",-apple-system,Arial,sans-serif';
+    let cv, ctx, y;
+    const newPage = () => { cv = document.createElement('canvas'); cv.width = W; cv.height = H; ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H); ctx.textBaseline = 'alphabetic'; y = M; pages.push(cv); };
+    const font = (sz, w) => { ctx.font = (w || 400) + ' ' + sz + 'px ' + FONT; };
+    function wrap(str, maxW) {
+      const out = [];
+      String(str).split('\n').forEach(par => {
+        let cur = '';
+        par.split(' ').forEach(w => {
+          const test = cur ? cur + ' ' + w : w;
+          if (ctx.measureText(test).width <= maxW) { cur = test; return; }
+          if (cur) out.push(cur);
+          if (ctx.measureText(w).width <= maxW) { cur = w; return; }
+          cur = ''; for (const ch of w) { if (ctx.measureText(cur + ch).width > maxW) { out.push(cur); cur = ch; } else cur += ch; }
+        });
+        out.push(cur);
+      });
+      return out;
+    }
+    function text(str, o) {
+      o = o || {}; const size = o.size || 28, x = o.x == null ? M : o.x, maxW = o.maxW || (W - M - x), lh = o.lh || 1.45;
+      font(size, o.weight); const lines = wrap(str, maxW);
+      lines.forEach(line => { if (y + size * lh > H - M - 40) { newPage(); font(size, o.weight); } ctx.fillStyle = o.color || '#1d1d1f'; ctx.fillText(line, x, y + size); y += size * lh; });
+      y += o.gap || 0;
+    }
+    const rule = () => { ctx.fillStyle = '#e3e3e8'; ctx.fillRect(M, y, W - 2 * M, 2); y += 22; };
+    function kv(k, v) { if (y + 50 > H - M - 40) newPage(); const y0 = y; font(26, 500); ctx.fillStyle = '#6e6e73'; ctx.fillText(k, M, y0 + 26); text(v, { x: M + 380, size: 28, gap: 6 }); if (y < y0 + 40) y = y0 + 40; }
+    function h2(t) { y += 26; if (y + 90 > H - M - 40) newPage(); text(t, { size: 34, weight: 700, gap: 4 }); rule(); }
+
+    newPage();
+    const caller = r.dir === 'in' ? r.peer : (myId || '—'), receiver = r.dir === 'in' ? (myId || '—') : r.peer;
+    const rid = 'CR-' + r.ts.toString(36).toUpperCase();
+    ctx.fillStyle = '#ff3b30'; ctx.fillRect(M, y, 14, 78);
+    text('Scam Call Report', { x: M + 34, size: 58, weight: 700, lh: 1.15 });
+    text('Report ID ' + rid + '  ·  Generated ' + new Date().toLocaleString() + ' by CallApp Scam Shield', { x: M + 34, size: 23, color: '#6e6e73', gap: 24 });
+
+    h2('1. Call details');
+    kv('Caller number', String(caller)); kv('Receiver number', String(receiver));
+    kv('Date and time', new Date(r.ts).toLocaleString()); kv('Duration', r.outcome === 'Completed' ? fmtDur(r.dur) : '—'); kv('Call ended', r.outcome);
+
+    h2('2. Scam analysis');
+    if (y + 80 > H - M - 40) newPage();
+    const lvlCol = { Low: '#34c759', Medium: '#ff9f0a', High: '#ff6b00', Critical: '#ff3b30' }[r.level] || '#ff3b30';
+    ctx.fillStyle = lvlCol; const bw = 360; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(M, y, bw, 58, 29) : ctx.rect(M, y, bw, 58); ctx.fill();
+    font(28, 700); ctx.fillStyle = '#fff'; ctx.fillText('Risk: ' + r.level + ' (' + r.maxScore + '%)', M + 28, y + 39); y += 84;
+    kv('Tactics detected', r.tactics && r.tactics.length ? r.tactics.map(t => nice(t.name) + ' (' + Math.round(t.conf * 100) + '%)').join('\n') : 'None');
+    kv('System alert', r.alert ? r.alert.message + (r.alert.action ? '\nAdvice: ' + r.alert.action : '') : 'No warning was raised.');
+
+    h2('3. Conversation');
+    const convo = (r.convo && r.convo.length) ? r.convo : (r.lines || []).map(t => ({ who: 'Caller', text: t, t: 0 }));
+    if (!convo.length) text('No speech was captured during this call.', { color: '#6e6e73' });
+    convo.forEach(c => {
+      if (y + 110 > H - M - 40) newPage();
+      const isC = c.who === 'Caller';
+      text(c.who + (c.t ? '  ·  ' + new Date(c.t).toLocaleTimeString() : ''), { size: 22, weight: 600, color: isC ? '#d70015' : '#0071e3', lh: 1.3 });
+      text(c.text, { size: 28, x: M + 24, gap: 14 });
+    });
+
+    y += 30; if (y + 220 > H - M - 40) newPage();
+    rule();
+    text('This report was generated automatically from speech recognition and rule-based analysis on the receiver\'s device. The conversation may contain recognition errors and has not been independently verified. In India, report cyber fraud at cybercrime.gov.in or call 1930 as soon as possible and attach this report.', { size: 21, color: '#6e6e73' });
+
+    pages.forEach((p, i) => { const c = p.getContext('2d'); c.font = '400 21px ' + FONT; c.fillStyle = '#86868b'; c.fillText('Page ' + (i + 1) + ' of ' + pages.length + '  ·  ' + rid, M, H - 52); });
+    return pagesToPDF(pages);
+  }
+
+  function pagesToPDF(pages) {
+    const enc = new TextEncoder(), chunks = []; let off = 0; const xref = [];
+    const put = d => { const b = typeof d === 'string' ? enc.encode(d) : d; chunks.push(b); off += b.length; };
+    const obj = (id, body) => { xref[id] = off; put(id + ' 0 obj\n'); put(body); put('\nendobj\n'); };
+    put('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    const n = pages.length, ids = pages.map((_, i) => 3 + i * 3);
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    obj(2, '<< /Type /Pages /Kids [' + ids.map(i => i + ' 0 R').join(' ') + '] /Count ' + n + ' >>');
+    pages.forEach((cv, i) => {
+      const pid = 3 + i * 3, cid = pid + 1, iid = pid + 2;
+      const b64 = cv.toDataURL('image/jpeg', 0.92).split(',')[1], bin = atob(b64), jpg = new Uint8Array(bin.length);
+      for (let k = 0; k < bin.length; k++) jpg[k] = bin.charCodeAt(k);
+      obj(pid, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /XObject << /Im0 ' + iid + ' 0 R >> >> /Contents ' + cid + ' 0 R >>');
+      const cs = 'q 595 0 0 842 0 0 cm /Im0 Do Q';
+      obj(cid, '<< /Length ' + cs.length + ' >>\nstream\n' + cs + '\nendstream');
+      xref[iid] = off; put(iid + ' 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + cv.width + ' /Height ' + cv.height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n'); put(jpg); put('\nendstream\nendobj\n');
+    });
+    const total = 3 + n * 3, xs = off;
+    put('xref\n0 ' + total + '\n0000000000 65535 f \n');
+    for (let i = 1; i < total; i++) put(String(xref[i]).padStart(10, '0') + ' 00000 n \n');
+    put('trailer\n<< /Size ' + total + ' /Root 1 0 R >>\nstartxref\n' + xs + '\n%%EOF');
+    return new Blob(chunks, { type: 'application/pdf' });
+  }
+
+  function pdfName(r) {
+    const d = new Date(r.ts), p = n => String(n).padStart(2, '0');
+    return 'scam-call-report-' + String(r.peer).replace(/[^\w-]/g, '') + '-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.pdf';
+  }
+  function downloadPDF(id) { const r = byId(id); if (!r) return; try { saveBlob(buildPDF(r), pdfName(r)); } catch (e) { console.error('[pdf]', e); status('Could not create the PDF report.'); } }
+
+  function onScamCallEnded(r) {
+    downloadPDF(r.id);                       // automatic download
+    const old = $('scamBanner'); if (old) old.remove();
+    const b = document.createElement('div'); b.id = 'scamBanner'; b.className = 'scam-banner';
+    b.innerHTML = '<b>Scam call ended — report saved</b><span>The PDF with both numbers and the conversation was downloaded. Share it with the cyber-crime authority.</span>' +
+      `<div class="bn-acts"><button class="btn-fill" data-pdf="${esc(r.id)}">Download again</button><button class="btn-soft" data-closebanner>Close</button></div>`;
+    document.body.appendChild(b);
+  }
+
+  /* ---------- events ---------- */
+  document.addEventListener('click', e => {
+    const t = e.target.closest('[data-tab],[data-goto],[data-toggle],[data-open],[data-callback],[data-del],[data-clear],[data-report],[data-print],[data-csv],[data-pdf],[data-closebanner],#histFilter button');
+    if (!t) return;
+    if (t.dataset.tab) return setTab(t.dataset.tab);
+    if (t.dataset.goto) return setTab(t.dataset.goto);
+    if (t.dataset.f) { hFilter = t.dataset.f; return renderHistory(); }
+    if (t.hasAttribute('data-toggle')) { const id = t.dataset.toggle; openId = openId === id ? null : id; return renderHistory(); }
+    if (t.hasAttribute('data-open')) { openId = t.dataset.open; hFilter = 'all'; return setTab('history'); }
+    if (t.dataset.callback) { setTab('live'); const inp = $('toId'); if (inp && !$('dialView').classList.contains('hidden')) { inp.value = t.dataset.callback; inp.focus(); } return; }
+    if (t.dataset.pdf) return downloadPDF(t.dataset.pdf);
+    if (t.hasAttribute('data-closebanner')) { const b = $('scamBanner'); if (b) b.remove(); return; }
+    if (t.dataset.report) return downloadReport(t.dataset.report);
+    if (t.dataset.print) return printReport(t.dataset.print);
+    if (t.hasAttribute('data-csv')) return exportCSV();
+    if (t.dataset.del) { history = history.filter(r => r.id !== t.dataset.del); saveHistory(); return renderHistory(); }
+    if (t.hasAttribute('data-clear')) { if (confirm('Delete all call history on this device?')) { history = []; saveHistory(); openId = null; renderHistory(); } }
+  });
+  $('myId').addEventListener('keydown', e => { if (e.key === 'Enter') register(); });
+  $('toId').addEventListener('keydown', e => { if (e.key === 'Enter') startCall(); });
+  setInterval(() => { if (tab === 'dashboard' && !$('appShell').classList.contains('hidden')) renderShieldStatus(); }, 4000);
+})();
+</script>
+</body>
+</html>

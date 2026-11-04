@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+.venv/
+env/
+venv/
+
+# Python cache & artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment secrets
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+
+# Learned scam phrases review queue
+ai/unknown_phrases.jsonl

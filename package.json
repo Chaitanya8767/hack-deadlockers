@@ -1,0 +1,14 @@
+{
+  "name": "callapp",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:ai": "cd ai && .venv\\Scripts\\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000",
+    "dev:all": "start.bat"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.17.0"
+  }
+}

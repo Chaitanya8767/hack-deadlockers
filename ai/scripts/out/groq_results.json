@@ -1,0 +1,689 @@
+{
+  "en:scam_digital_arrest": {
+    "language": "en",
+    "scenario": "scam_digital_arrest",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Hello, I am Officer Sharma calling from the Customs Department Mumbai Headquarters.",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 42.5,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"authority_impersonation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"Officer Sharma calling from the Customs Department Mumbai Headquarters\",\n      \"explanation\": \"The caller falsely claims to be an officer from the Customs Department to establish false authority.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "authority_impersonation"
+        ],
+        "groq_turn_score": 40.4,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "A parcel addressed in your name containing illegal contraband and narcotics has been seized.",
+        "regex_tactics": [
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 76.4,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"containing illegal contraband and narcotics has been seized\",\n      \"explanation\": \"The caller threatens the victim with serious legal consequences by falsely claiming that illegal narcotics were found in their parcel.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 75.5,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "A federal non-bailable arrest warrant has been issued against you under the NDPS Act.",
+        "regex_tactics": [
+          "digital_arrest",
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 96.5,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"A federal non-bailable arrest warrant has been issued against you under the NDPS Act\",\n      \"explanation\": \"The caller threatens the victim with a severe legal consequence (arrest warrant) under a specific act to induce panic and compliance.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 81.0,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 3,
+        "text": "You are placed under digital arrest right now. Do not disconnect this call or inform anyone.",
+        "regex_tactics": [
+          "digital_arrest",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.5,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"digital_arrest\",\n      \"confidence\": 0.98,\n      \"evidence\": \"You are placed under digital arrest right now. Do not disconnect this call or inform anyone.\",\n      \"explanation\": \"The caller explicitly demands the victim stay on the call and prohibits them from contacting anyone, which is a hallmark of digital arrest tactics.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "digital_arrest"
+        ],
+        "groq_turn_score": 97.2,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 4,
+        "text": "To clear your name from the police chargesheet, you must immediately transfer your funds to the RBI safe verification account.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.9,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"financial_manipulation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"immediately transfer your funds to the RBI safe verification account\",\n      \"explanation\": \"The caller is directing the victim to transfer money to a fraudulent account disguised as an official RBI verification account.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"immediately transfer\",\n      \"explanation\": \"The caller uses the word 'immediately' to force the victim into making a hasty financial decision without thinking.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"clear your name from the police chargesheet\",\n      \"explanation\": \"The caller threatens the victim with legal consequences (police chargesheet) to coerce them into complying with the financial demand.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 99.6,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "en:scam_remote_access": {
+    "language": "en",
+    "scenario": "scam_remote_access",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Good day sir, this is Michael from Microsoft Technical Security Support.",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 38.2,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 1,
+        "text": "We have detected severe malicious Trojan activity broadcasting from your IP address.",
+        "regex_tactics": [
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 72.4,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"authority_impersonation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"Microsoft Technical Security Support\",\n      \"explanation\": \"The caller falsely claims to be from Microsoft's technical security team, impersonating a trusted corporate authority.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"severe malicious Trojan activity broadcasting from your IP address\",\n      \"explanation\": \"The caller induces fear by alleging severe malicious activity originating from the user's IP address.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "authority_impersonation",
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 68.7,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 2,
+        "text": "Please open your browser immediately and install the AnyDesk QuickSupport application so we can secure your computer.",
+        "regex_tactics": [
+          "remote_access",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 95.9,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"remote_access\",\n      \"confidence\": 0.99,\n      \"evidence\": \"install the AnyDesk QuickSupport application\",\n      \"explanation\": \"The caller explicitly instructs the victim to install remote access software (AnyDesk/QuickSupport) to gain control of the computer.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.85,\n      \"evidence\": \"immediately\",\n      \"explanation\": \"The caller uses the word 'immediately' to pressure the victim into acting without thinking.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "remote_access",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 95.3,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "en:benign_flight_support": {
+    "language": "en",
+    "scenario": "benign_flight_support",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Good afternoon, this is customer service calling from Indigo Airlines regarding your upcoming flight to Delhi.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "We would like to inform you that your flight departure has been rescheduled by thirty minutes.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "Your updated departure time is 4:45 PM from Terminal 2. Have a pleasant trip.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "hi:scam_cbi_digital_arrest": {
+    "language": "hi",
+    "scenario": "scam_cbi_digital_arrest",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "नमस्कार, मैं सीबीआई क्राइम ब्रांच नई दिल्ली से सीनियर इंस्पेक्टर अजय कुमार बोल रहा हूँ।",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 39.1,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"authority_impersonation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"मैं सीबीआई क्राइम ब्रांच नई दिल्ली से सीनियर इंस्पेक्टर अजय कुमार बोल रहा हूँ\",\n      \"explanation\": \"The caller falsely claims to be a Senior Inspector from the CBI Crime Branch in New Delhi.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "authority_impersonation"
+        ],
+        "groq_turn_score": 41.6,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "आपके आधार कार्ड से जुड़े 5 बैंक खातों से करोड़ों रुपयों की अवैध मनी लॉन्ड्रिंग हुई है।",
+        "regex_tactics": [
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 73.8,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"करोड़ों रुपयों की अवैध मनी लॉन्ड्रिंग हुई है\",\n      \"explanation\": \"The caller threatens the victim with a severe legal accusation of large-scale money laundering to induce panic and compliance.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 76.3,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "सुप्रीम कोर्ट ने आपके खिलाफ तत्काल डिजिटल अरेस्ट का वारंट जारी कर दिया है।",
+        "regex_tactics": [
+          "digital_arrest",
+          "fear_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 96.1,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"authority_impersonation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"सुप्रीम कोर्ट ने\",\n      \"explanation\": \"The caller falsely claims that the Supreme Court has issued a warrant, impersonating a high-level judicial authority.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.92,\n      \"evidence\": \"तत्काल डिजिटल अरेस्ट का वारंट जारी कर दिया है\",\n      \"explanation\": \"The caller threatens the victim with an immediate digital arrest warrant to instill fear and panic.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "authority_impersonation",
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 80.8,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 3,
+        "text": "आप तुरंत अपने कमरे का दरवाजा बंद करें और कॉल चालू रखें, किसी को भी इसकी जानकारी नहीं होनी चाहिए।",
+        "regex_tactics": [
+          "digital_arrest",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.4,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"digital_arrest\",\n      \"confidence\": 0.98,\n      \"evidence\": \"कॉल चालू रखें, किसी को भी इसकी जानकारी नहीं होनी चाहिए\",\n      \"explanation\": \"The caller demands the victim keep the call active and prohibits them from informing anyone, which is a hallmark of digital arrest tactics to isolate the victim.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"तुरंत अपने कमरे का दरवाजा बंद करें\",\n      \"explanation\": \"The caller uses the word 'turant' (immediately) to force the victim to take immediate, isolated action.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "digital_arrest",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 97.1,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 4,
+        "text": "अगर आप गिरफ्तारी से बचना चाहते हैं तो 15 मिनट के अंदर सिक्योरिटी डिपॉजिट के तौर पर सरकारी खाते में पैसे ट्रांसफर कीजिए।",
+        "regex_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.9,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"15 मिनट के अंदर\",\n      \"explanation\": \"The caller imposes a strict 15-minute deadline to force immediate compliance.\"\n    },\n    {\n      \"tactic\": \"financial_manipulation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"सिक्योरिटी डिपॉजिट के तौर पर सरकारी खाते में पैसे ट्रांसफर कीजिए\",\n      \"explanation\": \"The caller demands a transfer of money to a 'government account' under the guise of a security deposit.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.92,\n      \"evidence\": \"अगर आप गिरफ्तारी से बचना चाहते हैं\",\n      \"explanation\": \"The caller uses the threat of arrest to coerce the victim into paying.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 99.6,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "hi:scam_bank_kyc_otp": {
+    "language": "hi",
+    "scenario": "scam_bank_kyc_otp",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "नमस्ते, मैं स्टेट बैंक ऑफ इंडिया के मुख्य शाखा से मैनेजर बात कर रहा हूँ।",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 39.1,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 1,
+        "text": "आपका बैंक खाता केवाईसी अपडेट न होने के कारण आज शाम को हमेशा के लिए ब्लॉक कर दिया जाएगा।",
+        "regex_tactics": [
+          "fear_manipulation",
+          "kyc_fraud"
+        ],
+        "regex_turn_score": 90.9,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"kyc_fraud\",\n      \"confidence\": 0.95,\n      \"evidence\": \"आपका बैंक खाता केवाईसी अपडेट न होने के कारण\",\n      \"explanation\": \"Caller falsely claims that the victim's bank account is at risk due to a pending KYC update.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"आज शाम को\",\n      \"explanation\": \"Caller imposes a strict deadline of 'this evening' to force immediate action.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.92,\n      \"evidence\": \"हमेशा के लिए ब्लॉक कर दिया जाएगा\",\n      \"explanation\": \"Caller threatens permanent blocking of the bank account to instill fear.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "kyc_fraud",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 85.0,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 2,
+        "text": "खाता चालू रखने के लिए आपके मोबाइल पर अभी एक 6 अंकों का ओटीपी आया होगा, तुरंत बताइए।",
+        "regex_tactics": [
+          "otp_request",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 98.6,
+        "groq_status": "ERROR",
+        "groq_raw": "The read operation timed out",
+        "groq_tactics": [],
+        "groq_turn_score": "ERROR",
+        "turn_agreement": false
+      }
+    ]
+  },
+  "hi:benign_food_delivery": {
+    "language": "hi",
+    "scenario": "benign_food_delivery",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "भैया नमस्ते, मैं स्विगी से डिलीवरी बॉय बोल रहा हूँ।",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "मैं आपकी बिल्डिंग के गेट नंबर 2 के पास खड़ा हूँ, क्या आप नीचे आ सकते हैं?",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "हाँ ठीक है भैया, मैं लिफ्ट के पास ही आपका इंतज़ार कर रहा हूँ।",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "hinglish:scam_telecom_sim_block": {
+    "language": "hinglish",
+    "scenario": "scam_telecom_sim_block",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Hello sir, this is TRAI Telecom verification department.",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 38.2,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": [\n  {\n    \"tactic\": \"authority_impersonation\",\n    \"confidence\": 0.95,\n    \"evidence\": \"TRAI Telecom verification department\",\n    \"explanation\": \"The caller falsely claims to be from the Telecom Regulatory Authority of India (TRAI) to establish false authority.\"\n  }\n]}",
+        "groq_tactics": [
+          "authority_impersonation"
+        ],
+        "groq_turn_score": 40.4,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "Aapka mobile number illegal activities mein use hua hai, within 2 hours permanent block kar denge.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 90.7,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"illegal activities mein use hua hai\",\n      \"explanation\": \"The caller falsely claims the user's mobile number is involved in illegal activities to instill fear.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.92,\n      \"evidence\": \"within 2 hours permanent block kar denge\",\n      \"explanation\": \"The caller imposes a strict 2-hour deadline to force immediate compliance.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 91.1,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "Police complaint se bachne ke liye biometric re-verification karwana padega.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "kyc_fraud"
+        ],
+        "regex_turn_score": 98.6,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"Police complaint se bachne ke liye\",\n      \"explanation\": \"The caller threatens the victim with a police complaint to induce fear and compliance.\"\n    },\n    {\n      \"tactic\": \"kyc_fraud\",\n      \"confidence\": 0.90,\n      \"evidence\": \"biometric re-verification karwana padega\",\n      \"explanation\": \"The caller demands urgent biometric re-verification, a common tactic to harvest sensitive identity data.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "kyc_fraud"
+        ],
+        "groq_turn_score": 98.7,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 3,
+        "text": "Aapke phone pe 6 digit OTP aaya hoga, turant batao warna line disconnect ho jayegi.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "otp_request",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.8,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"otp_request\",\n      \"confidence\": 0.98,\n      \"evidence\": \"Aapke phone pe 6 digit OTP aaya hoga, turant batao\",\n      \"explanation\": \"The caller explicitly requests the 6-digit OTP sent to the victim's phone.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"turant batao\",\n      \"explanation\": \"The caller uses the word 'turant' (immediately) to force the victim to act without thinking.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"warna line disconnect ho jayegi\",\n      \"explanation\": \"The caller threatens to disconnect the victim's phone line if the OTP is not provided immediately.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "otp_request",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 99.8,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "hinglish:scam_credit_card_reward": {
+    "language": "hinglish",
+    "scenario": "scam_credit_card_reward",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Congratulations sir, aapke HDFC credit card pe 25000 rupees ka reward points cashback nikla hai.",
+        "regex_tactics": [
+          "reward_scam"
+        ],
+        "regex_turn_score": 46.8,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"reward_scam\",\n      \"confidence\": 0.95,\n      \"evidence\": \"25000 rupees ka reward points cashback nikla hai\",\n      \"explanation\": \"The caller is using a fake reward or cashback offer to lure the victim, which is a common tactic in reward scams.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "reward_scam"
+        ],
+        "groq_turn_score": 46.8,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "Yeh reward points aaj expire ho jayenge, jaldi claim karna padega.",
+        "regex_tactics": [
+          "reward_scam",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 76.5,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"reward_scam\",\n      \"confidence\": 0.95,\n      \"evidence\": \"reward points aaj expire ho jayenge, jaldi claim karna padega\",\n      \"explanation\": \"The caller is leveraging a fake reward scenario to pressure the victim into claiming it, a common tactic in reward scams.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"aaj expire ho jayenge, jaldi claim karna padega\",\n      \"explanation\": \"The caller creates a false sense of urgency by stating the reward will expire today, pressuring the victim to act immediately.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "reward_scam",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 76.6,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "Amount receive karne ke liye apna card number aur CVV share kijiye.",
+        "regex_tactics": [
+          "identity_manipulation"
+        ],
+        "regex_turn_score": 88.9,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"identity_manipulation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"apna card number aur CVV share kijiye\",\n      \"explanation\": \"The caller explicitly requests sensitive financial credentials (card number and CVV) to harvest identity and financial data.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "identity_manipulation"
+        ],
+        "groq_turn_score": 89.6,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "hinglish:benign_dinner_plan": {
+    "language": "hinglish",
+    "scenario": "benign_dinner_plan",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "Hey bro, kaisa hai? Shaam ko kya plan hai?",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "Hum sab 8 baje cafe mein mil rahe hain, tu bhi aa ja.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "Pakka bro, see you there at 8 PM.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "mr:scam_police_digital_arrest": {
+    "language": "mr",
+    "scenario": "scam_police_digital_arrest",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "नमस्कार, मी मुंबई पोलीस मुख्यालयातून सायबर सेल इन्स्पेक्टर पाटील बोलत आहे.",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 42.1,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"authority_impersonation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"मुंबई पोलीस मुख्यालयातून सायबर सेल इन्स्पेक्टर पाटील बोलत आहे\",\n      \"explanation\": \"The caller falsely claims to be an Inspector from the Cyber Cell of the Mumbai Police Headquarters.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "authority_impersonation"
+        ],
+        "groq_turn_score": 40.4,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "तुमच्या नावावर बेकायदेशीर औषध तस्करी आणि हवाला रॅकेटचा गंभीर गुन्हा दाखल झाला आहे.",
+        "regex_tactics": [
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 77.7,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"बेकायदेशीर औषध तस्करी आणि हवाला रॅकेटचा गंभीर गुन्हा दाखल झाला आहे\",\n      \"explanation\": \"The caller threatens the victim with a serious criminal case involving illegal drug trafficking and hawala racket to instill fear.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation"
+        ],
+        "groq_turn_score": 75.5,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "तुम्हाला सध्या डिजिटल अरेस्ट करण्यात आले आहे, कॉल डिस्कनेक्ट करू नका आणि खोलीतून बाहेर पडू नका.",
+        "regex_tactics": [
+          "digital_arrest",
+          "fear_manipulation"
+        ],
+        "regex_turn_score": 96.7,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"digital_arrest\",\n      \"confidence\": 0.98,\n      \"evidence\": \"तुम्हाला सध्या डिजिटल अरेस्ट करण्यात आले आहे, कॉल डिस्कनेक्ट करू नका आणि खोलीतून बाहेर पडू नका\",\n      \"explanation\": \"The caller falsely claims the victim is under digital arrest and explicitly forbids them from disconnecting the call or leaving the room, which is a hallmark of digital arrest scams.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "digital_arrest"
+        ],
+        "groq_turn_score": 96.3,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 3,
+        "text": "तात्काळ तपास पूर्ण करण्यासाठी पडताळणी खात्यावर पैसे पाठवा नाहीतर थेट अटक केली जाईल.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 99.5,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"financial_manipulation\",\n      \"confidence\": 0.98,\n      \"evidence\": \"पडताळणी खात्यावर पैसे पाठवा\",\n      \"explanation\": \"The caller is demanding a money transfer to a 'verification account' to complete the investigation.\"\n    },\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"तात्काळ तपास पूर्ण करण्यासाठी\",\n      \"explanation\": \"The caller uses the word 'तात्काळ' (immediately) to force the victim to act without thinking.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.97,\n      \"evidence\": \"नाहीतर थेट अटक केली जाईल\",\n      \"explanation\": \"The caller threatens immediate arrest if the money is not transferred.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 99.4,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "mr:scam_electricity_bill": {
+    "language": "mr",
+    "scenario": "scam_electricity_bill",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "महावितरण वीज विभागातून बोलतोय, तुमचे मागील महिन्याचे वीज बिल भरलेले नाही.",
+        "regex_tactics": [
+          "authority_impersonation"
+        ],
+        "regex_turn_score": 37.4,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": false
+      },
+      {
+        "turn_index": 1,
+        "text": "आज रात्री नऊ वाजता तुमची वीज कायमची खंडित केली जाईल.",
+        "regex_tactics": [
+          "fear_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 90.6,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"आज रात्री नऊ वाजता\",\n      \"explanation\": \"The caller imposes a strict, immediate deadline (tonight at 9) to force the victim into acting quickly.\"\n    },\n    {\n      \"tactic\": \"fear_manipulation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"वीज कायमची खंडित केली जाईल\",\n      \"explanation\": \"The caller threatens permanent disconnection of electricity to instill fear and pressure the victim.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "fear_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 66.5,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "लगेच आम्ही पाठवलेल्या नंबरवर पाचशे रुपये पाठवून वीज बिल अपडेट करा.",
+        "regex_tactics": [
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "regex_turn_score": 98.6,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\n  \"tactics\": [\n    {\n      \"tactic\": \"urgency_creation\",\n      \"confidence\": 0.95,\n      \"evidence\": \"लगेच\",\n      \"explanation\": \"The caller uses the word 'लगेच' (immediately) to force the victim to act without delay.\"\n    },\n    {\n      \"tactic\": \"financial_manipulation\",\n      \"confidence\": 0.90,\n      \"evidence\": \"पाचशे रुपये पाठवून वीज बिल अपडेट करा\",\n      \"explanation\": \"The caller directs the victim to send money to a specific number to update the bill, which is a common tactic to bypass official payment channels.\"\n    }\n  ]\n}",
+        "groq_tactics": [
+          "financial_manipulation",
+          "urgency_creation"
+        ],
+        "groq_turn_score": 95.0,
+        "turn_agreement": true
+      }
+    ]
+  },
+  "mr:benign_family_call": {
+    "language": "mr",
+    "scenario": "benign_family_call",
+    "turns": [
+      {
+        "turn_index": 0,
+        "text": "नमस्कार काका, मी राहुल बोलतोय. कसे आहात तुम्ही?",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 1,
+        "text": "आईने सांगितले होते की तुम्ही पुण्याला येणार आहात, कधी पोहोचणार आहात?",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      },
+      {
+        "turn_index": 2,
+        "text": "हो चालेल, स्टेशनवर आल्यावर फोन करा, मी गाडी घेऊन येतो.",
+        "regex_tactics": [],
+        "regex_turn_score": 0.0,
+        "groq_status": "SUCCESS",
+        "groq_raw": "{\"tactics\": []}",
+        "groq_tactics": [],
+        "groq_turn_score": 0.0,
+        "turn_agreement": true
+      }
+    ]
+  }
+}

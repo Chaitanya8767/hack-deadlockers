@@ -1,0 +1,143 @@
+[
+  {
+    "id": "heldout_01",
+    "text": "Your courier package from London is held at Delhi airport customs, you must immediately transfer Rs 4,500 clearance fee to release it.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": ["authority_impersonation", "financial_manipulation", "urgency_creation"]
+  },
+  {
+    "id": "heldout_02",
+    "text": "Important security update: State Bank will never call you asking for CVV, OTP, or internet banking passwords. Stay alert against fraud.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_03",
+    "text": "Bhaiya, meri gadi puncture ho gayi hai raste mein, please 500 rupaye turant GPay kar do main shaam ko de dunga.",
+    "lang": "hinglish",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_04",
+    "text": "Dear customer, kindly visit your nearest bank branch with original identity documents before next month to update your periodic KYC records.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_05",
+    "text": "Sir I am standing outside your gate with the parcel, please share the 4 digit delivery PIN so I can mark the order delivered.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_06",
+    "text": "आपके घर का बिजली बिल बकाया है, आज रात 10 बजे बिजली काट दी जाएगी, तुरंत इस नंबर पर संपर्क करके बिल भरें।",
+    "lang": "hi",
+    "is_scam": true,
+    "expected_tactics": ["fear_manipulation", "urgency_creation"]
+  },
+  {
+    "id": "heldout_07",
+    "text": "Congratulations, you are selected for part-time online job, earn 5000 rupees daily reward cashback by liking videos.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": ["reward_scam"]
+  },
+  {
+    "id": "heldout_08",
+    "text": "Income Tax Department has approved your tax refund of Rs 18,500, verify your account details to claim your prize.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": ["reward_scam", "authority_impersonation"]
+  },
+  {
+    "id": "heldout_09",
+    "text": "तुमच्या क्रेडिट कार्डवर १५००० रुपयांचे रिवॉर्ड पॉइंट शिल्लक आहेत, ते आजच रिडीम करा नाहीतर एक्स्पायर होतील.",
+    "lang": "mr",
+    "is_scam": true,
+    "expected_tactics": ["reward_scam", "urgency_creation"]
+  },
+  {
+    "id": "heldout_10",
+    "text": "CBI crime branch se video call pe aao, digital custody ke liye room ka camera on rakhna padega.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": ["authority_impersonation", "digital_arrest"]
+  },
+  {
+    "id": "heldout_11",
+    "text": "To process your refund immediately, please download AnyDesk QuickSupport app on your mobile and share screen.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": ["remote_access", "urgency_creation"]
+  },
+  {
+    "id": "heldout_12",
+    "text": "Telecom verification alert: aapka SIM card within 2 hours permanent block kar diya jayega KYC expire hone ki wajah se.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": ["fear_manipulation", "urgency_creation", "kyc_fraud"]
+  },
+  {
+    "id": "heldout_13",
+    "text": "Are you free tonight around 8 for dinner at the new Italian place near cyber city?",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_14",
+    "text": "Hello Mrs. Patil, this is a reminder from clinic for your regular dental appointment tomorrow morning at 11 AM.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_15",
+    "text": "Bhaiya main location par pahunch gaya hu, aap building ke gate number 3 par aa jaiye.",
+    "lang": "hinglish",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_16",
+    "text": "Your monthly bank e-statement for the account ending in 4102 has been generated and sent to your registered email address.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_17",
+    "text": "तुमच्या पार्सलमध्ये बेकायदेशीर ड्रग्ज सापडले आहेत, पोलीस मुख्यालयातून गुन्हा दाखल केला जात आहे.",
+    "lang": "mr",
+    "is_scam": true,
+    "expected_tactics": ["fear_manipulation", "authority_impersonation"]
+  },
+  {
+    "id": "heldout_18",
+    "text": "Supreme Court se non-bailable warrant issue hua hai, phone cut mat karna warna police arrest karegi.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": ["fear_manipulation", "digital_arrest"]
+  },
+  {
+    "id": "heldout_19",
+    "text": "काका, मला थोडे पैसे कमी पडत आहेत, संध्याकाळी लगेच परत करतो, पाचशे रुपये गुगल पे करू शकाल का?",
+    "lang": "mr",
+    "is_scam": false,
+    "expected_tactics": []
+  },
+  {
+    "id": "heldout_20",
+    "text": "Main bank head office se manager bol raha hu, aapka card activate karne ke liye phone par aaya hua OTP batayein.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": ["authority_impersonation", "otp_request"]
+  }
+]
+

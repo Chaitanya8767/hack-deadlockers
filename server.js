@@ -18,6 +18,21 @@ app.post('/analyze_text', express.json(), async (req, res) => {
     res.status(502).json({ error: 'AI server unreachable on port 8000' });
   }
 });
+app.post('/report/:callId', express.json(), async (req, res) => {
+  try {
+    const r = await fetch('http://localhost:8000/report/' + encodeURIComponent(req.params.callId), {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(req.body || {})
+    });
+    if (!r.ok) return res.status(r.status).json(await r.json());
+    res.set('Content-Type', 'application/pdf');
+    res.set('Content-Disposition', r.headers.get('content-disposition') || 'attachment; filename="scam-complaint.pdf"');
+    const body = Buffer.from(await r.arrayBuffer()); res.send(body);
+  } catch (e) { res.status(502).json({ error: 'AI server unreachable on port 8000' }); }
+});
+app.get('/config', async (_req, res) => {
+  try { const r = await fetch('http://localhost:8000/config'); res.status(r.status).json(await r.json()); }
+  catch (_) { res.json({ victim_side_detection: false }); }
+});
 app.use(express.static(require('path').join(__dirname, 'public')));
 app.get('/api/ice', (_req, res) => {
   const iceServers = [

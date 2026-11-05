@@ -349,6 +349,7 @@ main.wrap{max-width:1040px;margin:0 auto;padding:44px 36px 80px}
               <button id="muteBtn" class="grey hidden" onclick="toggleMute()" aria-label="Mute">🎤</button>
               <button id="endBtn" class="red" onclick="endCall(true)" aria-label="End call"><svg viewBox="0 0 24 24" style="transform:rotate(135deg)"><path d="M6.6 10.8a15 15 0 006.6 6.6l2.2-2.2a1 1 0 011-.25 11.4 11.4 0 003.6.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1z"/></svg></button>
             </div>
+            <button class="btn-soft" style="margin-top:14px" onclick="openRecovery()">I shared an OTP/PIN/card</button>
             <div class="meters hidden" id="meters">
               You<div class="meter"><i id="lvlLocal"></i></div>
               Them<div class="meter"><i id="lvlRemote"></i></div>
@@ -406,6 +407,13 @@ main.wrap{max-width:1040px;margin:0 auto;padding:44px 36px 80px}
     </section>
 
   </main>
+  </div>
+</div>
+<div id="recoveryScreen" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10;padding:24px;overflow:auto">
+  <div class="card" style="max-width:520px;margin:40px auto"><h2>Protect your accounts now</h2>
+    <p>Select what was shared. Never enter the actual number here.</p><select id="sharedKind" class="field"><option value="otp">OTP</option><option value="pin">PIN</option><option value="card">Card details</option><option value="other">Other</option></select>
+    <p><label><input type="checkbox"> Block or freeze the card</label></p><p><label><input type="checkbox"> Change UPI PIN</label></p><p><label><input type="checkbox"> Call your bank immediately</label></p><p><label><input type="checkbox"> <a href="tel:1930">Call 1930</a></label></p><p><label><input type="checkbox"> <a href="https://cybercrime.gov.in" target="_blank" rel="noopener">Report at cybercrime.gov.in</a></label></p>
+    <button class="btn-primary" onclick="logSharedData()">Save emergency action</button> <button class="btn-soft" onclick="closeRecovery()">Close</button>
   </div>
 </div>
 <audio id="remoteAudio" autoplay playsinline></audio>
@@ -577,6 +585,7 @@ function onConnected(){
   tick=setInterval(()=>{ const s=Math.floor((Date.now()-startTs)/1000);
     $('timer').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); },1000);
   startAIAnalysis();
+  startVictimSideDetection();
 }
 function toggleMute(){ const t=localStream.getAudioTracks()[0]; t.enabled=!t.enabled;
   $('muteBtn').classList.toggle('on',!t.enabled); $('muteBtn').textContent=t.enabled?'🎤':'🔇'; }
@@ -618,7 +627,15 @@ async function activateAudioContext() {
 }
 
 /* ===== AI SCAM SHIELD INTEGRATION ===== */
-let aiWs = null, aiWorkletNode = null, aiAudioSource = null, aiReconnectTimer = null, aiReconnectDelay = 2000, callId = null;
+let aiWs = null, aiWorkletNode = null, aiAudioSource = null, aiReconnectTimer = null, aiReconnectDelay = 2000, callId = null, lastCompletedCallId = null;
+
+function openRecovery() { $('recoveryScreen').classList.remove('hidden'); }
+function closeRecovery() { $('recoveryScreen').classList.add('hidden'); }
+function logSharedData() {
+  const kind = $('sharedKind').value;
+  if (aiWs && aiWs.readyState === WebSocket.OPEN) aiWs.send(JSON.stringify({ type:'data_shared', kind }));
+  closeRecovery();
+}
 
 function toggleShieldBody() {
   const b = $('shieldBody');
@@ -655,6 +672,30 @@ async function startAIAnalysis() {
 
 /* ===== CHROME SPEECH RECOGNITION (Marathi) ===== */
 let asr = null, asrWanted = false;
+let sensitiveAsr = null, victimSideDetection = false;
+async function startVictimSideDetection() {
+  try { victimSideDetection = !!(await (await fetch('/config')).json()).victim_side_detection; } catch (_) { return; }
+  if (!victimSideDetection || isCaller) return;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition; if (!SR) return;
+  // A separate local-only recognizer: its text is never rendered, sent as transcript, scored, or retained.
+  sensitiveAsr = new SR(); sensitiveAsr.continuous = true; sensitiveAsr.interimResults = false; sensitiveAsr.lang = $('asrLang').value || 'en-IN';
+  sensitiveAsr.onresult = e => {
+    for (let i = e.resultIndex; i < e.results.length; i++) if (e.results[i].isFinal) detectSensitiveLocalSpeech(e.results[i][0].transcript || '');
+  };
+  sensitiveAsr.onend = () => { if (victimSideDetection && pc) try { sensitiveAsr.start(); } catch (_) {} };
+  try { sensitiveAsr.start(); } catch (_) {}
+}
+function detectSensitiveLocalSpeech(text) {
+  const normalized = String(text).toLowerCase();
+  const words = '(zero|one|two|three|four|five|six|seven|eight|nine|ek|do|teen|char|paanch|che|saat|aath|nau|shunya|एक|दो|तीन|चार|पांच|छह|सात|आठ|नौ|शून्य)';
+  const sequence = new RegExp('(?:\\d[\\s-]*){4,6}|(?:' + words + '\\s+){3,5}', 'i');
+  const kind = /otp|one time password|ओटीपी/.test(normalized) ? 'otp' : /pin|पिन/.test(normalized) ? 'pin' : /card|card number|कार्ड/.test(normalized) ? 'card' : '';
+  if (kind && (sequence.test(normalized) || /my\s+(otp|pin)|mera\s+(otp|pin)|my card/.test(normalized))) {
+    // Only the category is sent; any detected digits/words are intentionally discarded.
+    openRecovery(); if (aiWs && aiWs.readyState === WebSocket.OPEN) aiWs.send(JSON.stringify({type:'data_shared', kind}));
+  }
+}
+function stopVictimSideDetection() { victimSideDetection = false; if (sensitiveAsr) { try { sensitiveAsr.abort(); } catch (_) {} sensitiveAsr = null; } }
 function startBrowserASR() {
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) { updateShieldStatus('error', 'Open this page in Google Chrome for speech'); return; }
@@ -826,7 +867,22 @@ function handleAIMessage(m) {
     renderRisk(m);
   } else if (m.type === 'alert') {
     renderAlert(m);
+  } else if (m.type === 'scam_type') {
+    renderScamType(m);
   }
+}
+
+function renderScamType(m) {
+  const chips = $('shieldChips'); if (!chips) return;
+  const label = document.createElement('span'); label.className = 'tactic-chip';
+  label.textContent = `Scam type: ${m.type} (${Math.round((m.confidence || 0) * 100)}%)`;
+  label.title = (m.evidence || []).map(e => e.text).filter(Boolean).join('\n');
+  chips.prepend(label);
+  (m.evidence || []).slice(0, 3).forEach(e => {
+    const quote = document.createElement('span'); quote.className = 'tactic-chip';
+    quote.textContent = `“${e.text}”`;
+    chips.appendChild(quote);
+  });
 }
 
 function renderTranscript(m) {
@@ -962,6 +1018,7 @@ function escapeHtml(str) {
 
 function stopAIAnalysis() {
   stopBrowserASR();
+  stopVictimSideDetection();
   clearTimeout(aiReconnectTimer);
   if (aiWs) {
     try {
@@ -984,6 +1041,7 @@ function stopAIAnalysis() {
     try { aiSilentSink.disconnect(); } catch(e) {}
     aiSilentSink = null;
   }
+  lastCompletedCallId = callId;
   callId = null;
   $('shieldPanel').classList.add('hidden');
 }
@@ -1344,7 +1402,16 @@ ${row('System alert', r.alert ? esc(r.alert.message) + (r.alert.action ? '<br>Ad
   /* ---------- scam call -> PDF report (auto on call end) ---------- */
   const isScamCall = r => r && r.dir === 'in' && r.analysed && r.maxScore > 60;
 
-  function buildPDF(r) {
+  async function browserReportHash(r) {
+    const bytes = new TextEncoder().encode(JSON.stringify({
+      id: r.id, ts: r.ts, peer: r.peer, lines: r.lines || [], convo: r.convo || [],
+      tactics: r.tactics || [], maxScore: r.maxScore, level: r.level, alert: r.alert || null
+    }));
+    const digest = await crypto.subtle.digest('SHA-256', bytes);
+    return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function buildPDF(r) {
     const W = 1240, H = 1754, M = 96, pages = [];
     const FONT = '"Segoe UI","Nirmala UI","Noto Sans Devanagari","Mangal",-apple-system,Arial,sans-serif';
     let cv, ctx, y;
@@ -1407,6 +1474,7 @@ ${row('System alert', r.alert ? esc(r.alert.message) + (r.alert.action ? '<br>Ad
     y += 30; if (y + 220 > H - M - 40) newPage();
     rule();
     text('This report was generated automatically from speech recognition and rule-based analysis on the receiver\'s device. The conversation may contain recognition errors and has not been independently verified. In India, report cyber fraud at cybercrime.gov.in or call 1930 as soon as possible and attach this report.', { size: 21, color: '#6e6e73' });
+    text('SHA-256 (browser call record): ' + await browserReportHash(r), { size: 18, color: '#6e6e73' });
 
     pages.forEach((p, i) => { const c = p.getContext('2d'); c.font = '400 21px ' + FONT; c.fillStyle = '#86868b'; c.fillText('Page ' + (i + 1) + ' of ' + pages.length + '  ·  ' + rid, M, H - 52); });
     return pagesToPDF(pages);
@@ -1440,14 +1508,19 @@ ${row('System alert', r.alert ? esc(r.alert.message) + (r.alert.action ? '<br>Ad
     const d = new Date(r.ts), p = n => String(n).padStart(2, '0');
     return 'scam-call-report-' + String(r.peer).replace(/[^\w-]/g, '') + '-' + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate()) + '-' + p(d.getHours()) + p(d.getMinutes()) + '.pdf';
   }
-  function downloadPDF(id) { const r = byId(id); if (!r) return; try { saveBlob(buildPDF(r), pdfName(r)); } catch (e) { console.error('[pdf]', e); status('Could not create the PDF report.'); } }
+  async function downloadPDF(id) {
+    const r = byId(id);
+    if (!r) return;
+    try {
+      saveBlob(await buildPDF(r), pdfName(r));
+    } catch (e) { console.error('[pdf]', e); status('Could not create the PDF report.'); }
+  }
 
   function onScamCallEnded(r) {
-    downloadPDF(r.id);                       // automatic download
     const old = $('scamBanner'); if (old) old.remove();
     const b = document.createElement('div'); b.id = 'scamBanner'; b.className = 'scam-banner';
-    b.innerHTML = '<b>Scam call ended — report saved</b><span>The PDF with both numbers and the conversation was downloaded. Share it with the cyber-crime authority.</span>' +
-      `<div class="bn-acts"><button class="btn-fill" data-pdf="${esc(r.id)}">Download again</button><button class="btn-soft" data-closebanner>Close</button></div>`;
+    b.innerHTML = '<b>Scam call ended — report ready</b><span>Download the Marathi-safe report with its SHA-256 integrity digest.</span>' +
+      `<div class="bn-acts"><button class="btn-fill" data-pdf="${esc(r.id)}">Download report</button><button class="btn-soft" data-closebanner>Close</button></div>`;
     document.body.appendChild(b);
   }
 

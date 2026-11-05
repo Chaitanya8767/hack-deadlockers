@@ -1,9 +1,13 @@
 import asyncio
 import json
 import logging
+import os
 import time
+from datetime import datetime
+from pathlib import Path
 from typing import Dict, Optional
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
@@ -16,6 +20,8 @@ from risk_engine import RiskEngine
 from alert_generator import generate_alert
 import lexicon
 from rule_engine import analyze_text as rules_analyze
+from scam_type import classify_scam_type
+from reporting import create_report
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 logger = logging.getLogger("scamchain-main")
@@ -66,6 +72,8 @@ class ActiveCallSession:
         )
         self.worker_task: Optional[asyncio.Task] = None
         self.is_running = True
+        self.transcript, self.events, self.risk_timeline, self.data_shared = [], [], [], []
+        self.latest_scam_type = {"type": "Unknown/Benign", "confidence": 0.9, "runners_up": [], "evidence": []}
 
     async def send_json(self, data: dict):
         try:
@@ -74,6 +82,7 @@ class ActiveCallSession:
             logger.warning(f"Failed to send JSON to {self.call_id}: {e}")
 
 sessions: Dict[str, ActiveCallSession] = {}
+completed_calls: Dict[str, dict] = {}  # in-memory until the user exports a report
 
 @app.get("/health")
 async def health_check():
@@ -85,6 +94,10 @@ async def health_check():
         "mode": "pipeline_active",
         "active_calls": len(sessions),
     }
+
+@app.get("/config")
+async def client_config():
+    return {"victim_side_detection": os.getenv("VICTIM_SIDE_DETECTION", "false").lower() == "true"}
 
 @app.post("/analyze_text")
 async def analyze_text_endpoint(payload: dict):
@@ -216,6 +229,7 @@ async def process_call_audio(session: ActiveCallSession):
                         "t1": transcript.t1,
                         "final": True
                     })
+                    session.transcript.append({"id": transcript.id, "text": transcript.text, "lang": transcript.lang, "t0": transcript.t0, "t1": transcript.t1})
 
                     # 2. Conversation management
                     turn = Turn(
@@ -252,6 +266,7 @@ async def process_call_audio(session: ActiveCallSession):
                                 for item in new_tactics
                             ]
                         })
+                        session.events.extend([{**item.model_dump(), "turn_id": turn.id, "sentence": transcript.text} for item in new_tactics])
 
                     # 4. Sequence analysis & Risk Engine
                     all_events = conversation_manager.get_tactics(session.call_id)
@@ -264,6 +279,9 @@ async def process_call_audio(session: ActiveCallSession):
                         "trend": risk_eval.trend,
                         "patterns": risk_eval.patterns
                     })
+                    session.risk_timeline.append({"t": transcript.t1, "score": risk_eval.score, "level": risk_eval.level})
+                    session.latest_scam_type = classify_scam_type(session.events, risk_eval.patterns, session.risk_timeline)
+                    await session.send_json({"type": "scam_type", **session.latest_scam_type, "final": False})
 
                     # 5. Alert generator
                     alert = generate_alert(risk_eval.level, risk_eval.active_tactics)
@@ -334,6 +352,14 @@ async def analyze_call(websocket: WebSocket, call_id: str):
                     elif msg_type == "stop":
                         logger.info(f"Stop signal received for call {call_id}")
                         break
+                    elif msg_type == "data_shared":
+                        kind = str(payload.get("kind", "other")).lower()
+                        if kind not in {"otp", "pin", "card", "other"}:
+                            kind = "other"
+                        elapsed = max(0, time.time() - session.started_at)
+                        event = {"t": f"{int(elapsed // 60):02d}:{int(elapsed % 60):02d}", "kind": kind}
+                        session.data_shared.append(event)
+                        await session.send_json({"type": "data_shared", **event})
                 except Exception as ex:
                     logger.warning(f"Invalid text JSON received: {ex}")
 
@@ -345,6 +371,13 @@ async def analyze_call(websocket: WebSocket, call_id: str):
         session.is_running = False
         if session.worker_task:
             session.worker_task.cancel()
+        session.latest_scam_type = classify_scam_type(session.events, [], session.risk_timeline)
+        completed_calls[call_id] = {
+            "call_id": call_id, "started_at": datetime.fromtimestamp(session.started_at).isoformat(),
+            "duration_seconds": max(0, time.time() - session.started_at), "transcript": session.transcript,
+            "events": session.events, "risk_timeline": session.risk_timeline,
+            "data_shared": session.data_shared, "scam_type": session.latest_scam_type,
+        }
         if stt_engine:
             stt_engine.reset_call(call_id)
         if risk_engine:
@@ -353,6 +386,14 @@ async def analyze_call(websocket: WebSocket, call_id: str):
             conversation_manager.reset_call(call_id)
         sessions.pop(call_id, None)
         logger.info(f"Cleaned up session for call {call_id}")
+
+@app.post("/report/{call_id}")
+async def download_report(call_id: str, payload: dict):
+    call = completed_calls.get(call_id)
+    if not call:
+        raise HTTPException(404, "No in-memory call record found. Download immediately after the call.")
+    pdf_path, _json_path, _digest = create_report(call, str(payload.get("scammer_identifier", "")), Path(__file__).parent / "reports")
+    return FileResponse(pdf_path, media_type="application/pdf", filename=pdf_path.name)
 
 if __name__ == "__main__":
     import uvicorn

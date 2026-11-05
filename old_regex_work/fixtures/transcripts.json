@@ -1,0 +1,339 @@
+[
+  {
+    "id": "utt_01",
+    "text": "Hello, I am Officer Sharma calling from Customs Department Mumbai Headquarters.",
+    "lang": "en",
+    "expected_tactics": ["authority_impersonation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_02",
+    "text": "नमस्कार, मैं सीबीआई क्राइम ब्रांच नई दिल्ली से सीनियर इंस्पेक्टर अजय कुमार बोल रहा हूँ।",
+    "lang": "hi",
+    "expected_tactics": ["authority_impersonation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_03",
+    "text": "मी मुंबई पोलीस मुख्यालयातून सायबर सेल इन्स्पेक्टर पाटील बोलत आहे.",
+    "lang": "mr",
+    "expected_tactics": ["authority_impersonation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_04",
+    "text": "Hello sir, this is TRAI Telecom verification department calling.",
+    "lang": "en",
+    "expected_tactics": ["authority_impersonation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_05",
+    "text": "You must take action immediately right now within 15 minutes or your line will be disconnected.",
+    "lang": "en",
+    "expected_tactics": ["urgency_creation", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_06",
+    "text": "तुरंत 10 मिनट के अंदर यह प्रक्रिया पूरी कीजिए वरना भारी जुर्माना लगेगा।",
+    "lang": "hi",
+    "expected_tactics": ["urgency_creation", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_07",
+    "text": "लगेच पाच मिनिटांत पैसे भरा नाहीतर आज रात्री वीज कायमची खंडित केली जाईल.",
+    "lang": "mr",
+    "expected_tactics": ["urgency_creation", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_08",
+    "text": "Jaldi karo warna account freeze ho jayega abhi ke abhi.",
+    "lang": "hinglish",
+    "expected_tactics": ["urgency_creation", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_09",
+    "text": "A parcel addressed in your name containing illegal contraband and narcotics has been seized.",
+    "lang": "en",
+    "expected_tactics": ["fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_10",
+    "text": "आपके आधार कार्ड से जुड़े बैंक खातों से करोड़ों रुपयों की अवैध मनी लॉन्ड्रिंग हुई है।",
+    "lang": "hi",
+    "expected_tactics": ["fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_11",
+    "text": "तुमच्या नावावर बेकायदेशीर औषध तस्करी आणि हवाला रॅकेटचा गंभीर गुन्हा दाखल झाला आहे.",
+    "lang": "mr",
+    "expected_tactics": ["fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_12",
+    "text": "Police complaint darj ho chuki hai, illegal activities ki wajah se permanent block kar denge.",
+    "lang": "hinglish",
+    "expected_tactics": ["fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_13",
+    "text": "You are placed under digital arrest right now. Do not disconnect this call or inform anyone.",
+    "lang": "en",
+    "expected_tactics": ["digital_arrest", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_14",
+    "text": "सुप्रीम कोर्ट ने आपके खिलाफ तत्काल डिजिटल अरेस्ट का वारंट जारी कर दिया है।",
+    "lang": "hi",
+    "expected_tactics": ["digital_arrest", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_15",
+    "text": "तुम्हाला सध्या डिजिटल अरेस्ट करण्यात आले आहे, कॉल डिस्कनेक्ट करू नका आणि खोलीतून बाहेर पडू नका.",
+    "lang": "mr",
+    "expected_tactics": ["digital_arrest", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_16",
+    "text": "Camera on rakho aur call mat kaatna, kisi ko bataya toh arrest ho jaoge.",
+    "lang": "hinglish",
+    "expected_tactics": ["digital_arrest", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_17",
+    "text": "Please share the 6 digit verification code OTP received on your mobile.",
+    "lang": "en",
+    "expected_tactics": ["otp_request"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_18",
+    "text": "आपके मोबाइल पर अभी एक 6 अंकों का ओटीपी आया होगा, तुरंत बताइए।",
+    "lang": "hi",
+    "expected_tactics": ["otp_request", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_19",
+    "text": "पडताळणी पूर्ण करण्यासाठी तुमच्या मोबाईलवर आलेला ओटीपी सांगा.",
+    "lang": "mr",
+    "expected_tactics": ["otp_request"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_20",
+    "text": "Phone pe OTP aaya hoga, turant batao warna account block ho jayega.",
+    "lang": "hinglish",
+    "expected_tactics": ["otp_request", "urgency_creation", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_21",
+    "text": "Tell me the oh tee pee number sent by your bank.",
+    "lang": "en",
+    "expected_tactics": ["otp_request"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_22",
+    "text": "You must immediately transfer your funds to the RBI safe verification account.",
+    "lang": "en",
+    "expected_tactics": ["financial_manipulation", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_23",
+    "text": "सरकारी खाते में सिक्योरिटी डिपॉजिट के तौर पर पचास हजार रुपये ट्रांसफर कीजिए।",
+    "lang": "hi",
+    "expected_tactics": ["financial_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_24",
+    "text": "तात्काळ तपास पूर्ण करण्यासाठी पडताळणी खात्यावर पैसे पाठवा.",
+    "lang": "mr",
+    "expected_tactics": ["financial_manipulation", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_25",
+    "text": "Verification fee deposit karke safe account me transfer karo.",
+    "lang": "hinglish",
+    "expected_tactics": ["financial_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_26",
+    "text": "Your bank account KYC has expired and will be blocked today without update.",
+    "lang": "en",
+    "expected_tactics": ["kyc_fraud", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_27",
+    "text": "आपका बैंक खाता केवाईसी अपडेट न होने के कारण आज शाम को हमेशा के लिए ब्लॉक कर दिया जाएगा।",
+    "lang": "hi",
+    "expected_tactics": ["kyc_fraud", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_28",
+    "text": "केवायसी पडताळणी पूर्ण करण्यासाठी पाठवलेली लिंक लगेच उघडा.",
+    "lang": "mr",
+    "expected_tactics": ["kyc_fraud", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_29",
+    "text": "Police case se bachne ke liye biometric re-verification karwana padega.",
+    "lang": "hinglish",
+    "expected_tactics": ["kyc_fraud", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_30",
+    "text": "Please install the AnyDesk QuickSupport application immediately so we can fix your computer.",
+    "lang": "en",
+    "expected_tactics": ["remote_access", "urgency_creation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_31",
+    "text": "अपने मोबाइल में TeamViewer डाउनलोड करके स्क्रीन शेयर कीजिए।",
+    "lang": "hi",
+    "expected_tactics": ["remote_access"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_32",
+    "text": "तातडीने rustdesk ॲप डाऊनलोड करा आणि स्क्रीन शेअर सुरू करा.",
+    "lang": "mr",
+    "expected_tactics": ["remote_access"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_33",
+    "text": "Congratulations, you have won a cash prize of 25000 rupees in lottery lucky draw.",
+    "lang": "en",
+    "expected_tactics": ["reward_scam"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_34",
+    "text": "बधाई हो, आपके क्रेडिट कार्ड पर 25000 रुपये का रिवॉर्ड कैशबैक निकला है।",
+    "lang": "hi",
+    "expected_tactics": ["reward_scam"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_35",
+    "text": "तुमच्या नंबरवर २५००० रुपयांचे बक्षीस लागले आहे, बक्षीस मिळवण्यासाठी क्लेम करा.",
+    "lang": "mr",
+    "expected_tactics": ["reward_scam"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_36",
+    "text": "Share your credit card number, expiry date, and CVV to receive the refund.",
+    "lang": "en",
+    "expected_tactics": ["identity_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_37",
+    "text": "रकम प्राप्त करने के लिए अपना आधार नंबर और पैन कार्ड डिटेल्स बताइए।",
+    "lang": "hi",
+    "expected_tactics": ["identity_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_38",
+    "text": "Card number aur CVV share kijiye taaki payment process ho sake.",
+    "lang": "hinglish",
+    "expected_tactics": ["identity_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_39",
+    "text": "I am CBI officer, you are under digital arrest right now, immediately tell me the OTP or go to jail.",
+    "lang": "en",
+    "expected_tactics": ["authority_impersonation", "digital_arrest", "urgency_creation", "otp_request", "fear_manipulation"],
+    "is_scam": true
+  },
+  {
+    "id": "utt_40",
+    "text": "Dear customer, remember that Bank officials will never ask for your OTP or password.",
+    "lang": "en",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_41",
+    "text": "सतर्क रहें! बैंक कभी भी आपसे फोन पर ओटीपी, पिन या पासवर्ड नहीं मांगता। किसी के साथ शेयर ना करें।",
+    "lang": "hi",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_42",
+    "text": "खबरदारीची सूचना: बँक कधीही ग्राहकांना ओटीपी किंवा पासवर्ड विचारत नाही, कोणालाही सांगू नका.",
+    "lang": "mr",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_43",
+    "text": "Never share your OTP with anyone, frauds are calling pretending to be police officers.",
+    "lang": "en",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_44",
+    "text": "Good afternoon, this is customer service calling from Indigo Airlines regarding your upcoming flight to Delhi.",
+    "lang": "en",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_45",
+    "text": "भैया नमस्ते, मैं स्विगी से डिलीवरी बॉय बोल रहा हूँ, बिल्डिंग के गेट नंबर 2 के पास खड़ा हूँ।",
+    "lang": "hi",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_46",
+    "text": "नमस्कार काका, मी राहुल बोलतोय, तुम्ही पुण्याला पोहोचल्यावर फोन करा मी गाडी घेऊन येतो.",
+    "lang": "mr",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_47",
+    "text": "Hey bro, kaisa hai? Hum sab 8 baje cafe mein mil rahe hain, tu bhi aa ja.",
+    "lang": "hinglish",
+    "expected_tactics": [],
+    "is_scam": false
+  },
+  {
+    "id": "utt_48",
+    "text": "Your package from Amazon will be delivered by 5 PM today, please keep the exact cash ready.",
+    "lang": "en",
+    "expected_tactics": [],
+    "is_scam": false
+  }
+]
+

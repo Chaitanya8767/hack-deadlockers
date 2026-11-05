@@ -1,0 +1,393 @@
+[
+  {
+    "id": "heldout2_01",
+    "text": "This is Mumbai Customs officer Sharma, a parcel containing illegal narcotics has been seized in your name, you must join our Skype interrogation room immediately.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "digital_arrest",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "authority_impersonation",
+      "fear_manipulation"
+    ],
+    "risk_score": 85.0,
+    "risk_level": "Critical",
+    "risk_patterns": [
+      "digital_arrest_flow",
+      "remote_access_flow",
+      "kyc_freeze_flow"
+    ]
+  },
+  {
+    "id": "heldout2_02",
+    "text": "Hi Dad, my laptop charger stopped working at the library, can you please GPay Rs 800 urgently so I can buy a replacement before my exam?",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [
+      "urgency_creation"
+    ],
+    "risk_score": 33.7,
+    "risk_level": "Medium",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_03",
+    "text": "हम आयकर विभाग से बोल रहे हैं, आपका 25000 रुपये का रिफंड अप्रूव हुआ है, क्लेम करने के लिए प्रोसेसिंग फीस जमा करें।",
+    "lang": "hi",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "reward_scam",
+      "financial_manipulation"
+    ],
+    "detected_tactics": [
+      "financial_manipulation"
+    ],
+    "risk_score": 46.8,
+    "risk_level": "Medium",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_04",
+    "text": "नमस्कार, अपोलो क्लिनिक से बोल रहा हूँ, आपकी माँ की डॉक्टर अपॉइंटमेंट कल दोपहर 2 बजे की पक्की हो गई है।",
+    "lang": "hi",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_05",
+    "text": "पोलीस मुख्यालयातून इन्स्पेक्टर पाटील बोलतोय, तुमच्यावर डिजिटल वॉरंट निघाले आहे, लगेच कॅमेरा ऑन करा आणि कॉल कापू नका.",
+    "lang": "mr",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "digital_arrest",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "authority_impersonation"
+    ],
+    "risk_score": 61.9,
+    "risk_level": "High",
+    "risk_patterns": [
+      "remote_access_flow"
+    ]
+  },
+  {
+    "id": "heldout2_06",
+    "text": "आई, माझा फोनचा बॅलन्स संपत आला आहे, मी संध्याकाळी घरी आल्यावर बोलतो, काळजी करू नको.",
+    "lang": "mr",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_07",
+    "text": "Aapka Aadhaar card biometric update hona baaki hai, turant phone pe aaya hua 6 digit OTP batayein warna account suspend ho jayega.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": [
+      "fear_manipulation",
+      "otp_request",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "otp_request"
+    ],
+    "risk_score": 83.0,
+    "risk_level": "Critical",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_08",
+    "text": "Bhai Zomato delivery boy gate pe khada hai, please 4 digit delivery PIN de do taki order handover kar sake.",
+    "lang": "hinglish",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_09",
+    "text": "Microsoft technical support here, your computer is infected with trojan malware, install QuickSupport immediately and share screen.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "remote_access",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "remote_access",
+      "fear_manipulation"
+    ],
+    "risk_score": 85.0,
+    "risk_level": "Critical",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_10",
+    "text": "Dear customer, as per RBI norms, please visit your nearest HDFC bank branch with your original PAN and Aadhaar for periodic KYC renewal.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_11",
+    "text": "बधाई हो! आपने लकी ड्रॉ में 5 लाख रुपये जीते हैं, अपनी इनाम राशि सुरक्षित खाते में प्राप्त करने के लिए रजिस्ट्रेशन फीस भेजें।",
+    "lang": "hi",
+    "is_scam": true,
+    "expected_tactics": [
+      "reward_scam",
+      "financial_manipulation"
+    ],
+    "detected_tactics": [
+      "financial_manipulation",
+      "reward_scam"
+    ],
+    "risk_score": 82.9,
+    "risk_level": "Critical",
+    "risk_patterns": [
+      "remote_access_flow"
+    ]
+  },
+  {
+    "id": "heldout2_12",
+    "text": "अरे भाई, गाड़ी पंचर हो गई है हाईवे पर, कोई गैराज नहीं मिल रहा, 1000 रुपये भेज दे मैं कल सुबह वापस कर दूंगा।",
+    "lang": "hi",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_13",
+    "text": "महावितरण वीज विभागातून बोलतोय, तुमचे बिल थकले आहे, आज रात्री वीज कायमची खंडित होईल, लगेच या नंबरवर पैसे पाठवा.",
+    "lang": "mr",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "urgency_creation",
+      "financial_manipulation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "financial_manipulation",
+      "authority_impersonation",
+      "fear_manipulation"
+    ],
+    "risk_score": 85.0,
+    "risk_level": "Critical",
+    "risk_patterns": [
+      "digital_arrest_flow",
+      "remote_access_flow",
+      "kyc_freeze_flow"
+    ]
+  },
+  {
+    "id": "heldout2_14",
+    "text": "नमस्कार सर, मी स्विगी वरून बोलतोय, तुमच्या सोसायटीच्या गेटवर आलो आहे, डिलिव्हरी कोड सांगून पार्सल घ्या.",
+    "lang": "mr",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_15",
+    "text": "CBI headquarters se call hai, aapke bank account me money laundering hui hai, case se bachne ke liye safe account me paise transfer karein.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "financial_manipulation"
+    ],
+    "detected_tactics": [
+      "financial_manipulation",
+      "authority_impersonation",
+      "fear_manipulation"
+    ],
+    "risk_score": 85.0,
+    "risk_level": "Critical",
+    "risk_patterns": [
+      "digital_arrest_flow",
+      "remote_access_flow",
+      "kyc_freeze_flow"
+    ]
+  },
+  {
+    "id": "heldout2_16",
+    "text": "Sunil, hum log cafe me wait kar rahe hain, tu kitni der me pahuchega? Jaldi aaja coffee thandi ho rahi hai.",
+    "lang": "hinglish",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_17",
+    "text": "FedEx courier security: your parcel from Bangkok has been detained by police due to illegal contraband, pay Rs 8,000 customs clearance fee.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "financial_manipulation"
+    ],
+    "detected_tactics": [
+      "financial_manipulation",
+      "fear_manipulation"
+    ],
+    "risk_score": 84.4,
+    "risk_level": "Critical",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_18",
+    "text": "Security Advisory: State Bank of India never requests OTP, PIN or remote app installation over phone calls. Never share credentials with anyone.",
+    "lang": "en",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_19",
+    "text": "सुप्रीम कोर्ट से गैर-जमानती गिरफ्तारी वारंट जारी हुआ है, वीडियो कॉल पर आकर डिजिटल कस्टडी रूम में बैठें।",
+    "lang": "hi",
+    "is_scam": true,
+    "expected_tactics": [
+      "fear_manipulation",
+      "digital_arrest"
+    ],
+    "detected_tactics": [
+      "digital_arrest",
+      "fear_manipulation"
+    ],
+    "risk_score": 46.8,
+    "risk_level": "Medium",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_20",
+    "text": "नमस्ते मैडम, आपकी सोसाइटी मेंटेनेंस की रसीद ईमेल पर भेज दी गई है, चेक कर लीजिएगा।",
+    "lang": "hi",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_21",
+    "text": "बँक हेड ऑफिसमधून मॅनेजर बोलतोय, तुमचे क्रेडिट कार्ड रिवॉर्ड पॉईंट्स आजच रिडीम करा, कार्डवरील ओटीपी सांगा.",
+    "lang": "mr",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "reward_scam",
+      "otp_request",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "otp_request"
+    ],
+    "risk_score": 83.6,
+    "risk_level": "Critical",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_22",
+    "text": "प्रिय ग्राहक, केवायसी पडताळणी पूर्ण करण्यासाठी कृपया चालू महिन्यात आपल्या जवळच्या शाखेला भेट द्या.",
+    "lang": "mr",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [
+      "kyc_fraud"
+    ],
+    "risk_score": 46.8,
+    "risk_level": "Medium",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_23",
+    "text": "Part time work from home: earn 5000 daily reward cashback by clicking links, join WhatsApp group now.",
+    "lang": "hinglish",
+    "is_scam": true,
+    "expected_tactics": [
+      "reward_scam"
+    ],
+    "detected_tactics": [
+      "reward_scam"
+    ],
+    "risk_score": 45.4,
+    "risk_level": "Medium",
+    "risk_patterns": [
+      "remote_access_flow"
+    ]
+  },
+  {
+    "id": "heldout2_24",
+    "text": "Uncle hospital me admit hain, doctor ne dawa lane bola hai, please 2000 gpay kar do main shaam ko de dunga.",
+    "lang": "hinglish",
+    "is_scam": false,
+    "expected_tactics": [],
+    "detected_tactics": [],
+    "risk_score": 0.0,
+    "risk_level": "Low",
+    "risk_patterns": []
+  },
+  {
+    "id": "heldout2_25",
+    "text": "TRAI verification cell: your mobile connection will be blocked permanently within 1 hour unless you verify your identity details right now.",
+    "lang": "en",
+    "is_scam": true,
+    "expected_tactics": [
+      "authority_impersonation",
+      "fear_manipulation",
+      "urgency_creation"
+    ],
+    "detected_tactics": [
+      "urgency_creation",
+      "fear_manipulation"
+    ],
+    "risk_score": 64.4,
+    "risk_level": "High",
+    "risk_patterns": []
+  }
+]
